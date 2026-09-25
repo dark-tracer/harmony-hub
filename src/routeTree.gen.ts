@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ObituaryRouteImport } from './routes/obituary'
 import { Route as OrderOfServiceRouteImport } from './routes/order-of-service'
+import { Route as PhotoGalleryRouteImport } from './routes/photo-gallery'
 import { Route as ServiceDetailsRouteImport } from './routes/service-details'
 
 const IndexRoute = IndexRouteImport.update({
@@ -29,6 +30,11 @@ const OrderOfServiceRoute = OrderOfServiceRouteImport.update({
   path: '/order-of-service',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PhotoGalleryRoute = PhotoGalleryRouteImport.update({
+  id: '/photo-gallery',
+  path: '/photo-gallery',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ServiceDetailsRoute = ServiceDetailsRouteImport.update({
   id: '/service-details',
   path: '/service-details',
@@ -39,12 +45,14 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/obituary': typeof ObituaryRoute
   '/order-of-service': typeof OrderOfServiceRoute
+  '/photo-gallery': typeof PhotoGalleryRoute
   '/service-details': typeof ServiceDetailsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/obituary': typeof ObituaryRoute
   '/order-of-service': typeof OrderOfServiceRoute
+  '/photo-gallery': typeof PhotoGalleryRoute
   '/service-details': typeof ServiceDetailsRoute
 }
 export interface FileRoutesById {
@@ -52,20 +60,38 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/obituary': typeof ObituaryRoute
   '/order-of-service': typeof OrderOfServiceRoute
+  '/photo-gallery': typeof PhotoGalleryRoute
   '/service-details': typeof ServiceDetailsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/obituary' | '/order-of-service' | '/service-details'
+  fullPaths:
+    | '/'
+    | '/obituary'
+    | '/order-of-service'
+    | '/photo-gallery'
+    | '/service-details'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/obituary' | '/order-of-service' | '/service-details'
-  id: '__root__' | '/' | '/obituary' | '/order-of-service' | '/service-details'
+  to:
+    | '/'
+    | '/obituary'
+    | '/order-of-service'
+    | '/photo-gallery'
+    | '/service-details'
+  id:
+    | '__root__'
+    | '/'
+    | '/obituary'
+    | '/order-of-service'
+    | '/photo-gallery'
+    | '/service-details'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ObituaryRoute: typeof ObituaryRoute
   OrderOfServiceRoute: typeof OrderOfServiceRoute
+  PhotoGalleryRoute: typeof PhotoGalleryRoute
   ServiceDetailsRoute: typeof ServiceDetailsRoute
 }
 
@@ -92,6 +118,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OrderOfServiceRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/photo-gallery': {
+      id: '/photo-gallery'
+      path: '/photo-gallery'
+      fullPath: '/photo-gallery'
+      preLoaderRoute: typeof PhotoGalleryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/service-details': {
       id: '/service-details'
       path: '/service-details'
@@ -106,6 +139,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ObituaryRoute: ObituaryRoute,
   OrderOfServiceRoute: OrderOfServiceRoute,
+  PhotoGalleryRoute: PhotoGalleryRoute,
   ServiceDetailsRoute: ServiceDetailsRoute,
 }
 export const routeTree = rootRouteImport
