@@ -51,7 +51,3 @@ export function MemorialShell({ children }: { children: ReactNode }) {
 export function PageIntro({ eyebrow, title, subtitle }: { eyebrow: string; title: string; subtitle: string }) {
   return <section className="memorial-intro"><div className="mx-auto max-w-4xl px-5 text-center"><p className="eyebrow">✦ {eyebrow} ✦</p><h1 className="mt-4 font-display text-4xl font-semibold text-primary md:text-6xl">{title}</h1><p className="mx-auto mt-5 max-w-2xl font-body text-lg italic text-muted-foreground">{subtitle}</p><div className="ornament">◆</div></div></section>;
 }
-
-export function MetaHead({ title, description }: { title: string; description: string }) {
-  return null;
-}

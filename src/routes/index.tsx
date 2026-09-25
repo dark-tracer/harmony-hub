@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { BookOpen, CalendarDays, Camera, Church, Download, ListOrdered } from "lucide-react";
+import { BookOpen, Camera, Church, Download, ListOrdered } from "lucide-react";
 import { MemorialShell } from "@/components/memorial-shell";
 import { portrait } from "@/lib/memorial-data";
 

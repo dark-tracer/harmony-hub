@@ -10,33 +10,63 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ObituaryRouteImport } from './routes/obituary'
+import { Route as OrderOfServiceRouteImport } from './routes/order-of-service'
+import { Route as ServiceDetailsRouteImport } from './routes/service-details'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ObituaryRoute = ObituaryRouteImport.update({
+  id: '/obituary',
+  path: '/obituary',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OrderOfServiceRoute = OrderOfServiceRouteImport.update({
+  id: '/order-of-service',
+  path: '/order-of-service',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ServiceDetailsRoute = ServiceDetailsRouteImport.update({
+  id: '/service-details',
+  path: '/service-details',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/obituary': typeof ObituaryRoute
+  '/order-of-service': typeof OrderOfServiceRoute
+  '/service-details': typeof ServiceDetailsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/obituary': typeof ObituaryRoute
+  '/order-of-service': typeof OrderOfServiceRoute
+  '/service-details': typeof ServiceDetailsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/obituary': typeof ObituaryRoute
+  '/order-of-service': typeof OrderOfServiceRoute
+  '/service-details': typeof ServiceDetailsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/obituary' | '/order-of-service' | '/service-details'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/obituary' | '/order-of-service' | '/service-details'
+  id: '__root__' | '/' | '/obituary' | '/order-of-service' | '/service-details'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ObituaryRoute: typeof ObituaryRoute
+  OrderOfServiceRoute: typeof OrderOfServiceRoute
+  ServiceDetailsRoute: typeof ServiceDetailsRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +78,35 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/obituary': {
+      id: '/obituary'
+      path: '/obituary'
+      fullPath: '/obituary'
+      preLoaderRoute: typeof ObituaryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/order-of-service': {
+      id: '/order-of-service'
+      path: '/order-of-service'
+      fullPath: '/order-of-service'
+      preLoaderRoute: typeof OrderOfServiceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/service-details': {
+      id: '/service-details'
+      path: '/service-details'
+      fullPath: '/service-details'
+      preLoaderRoute: typeof ServiceDetailsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ObituaryRoute: ObituaryRoute,
+  OrderOfServiceRoute: OrderOfServiceRoute,
+  ServiceDetailsRoute: ServiceDetailsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
