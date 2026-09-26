@@ -8,3 +8,6 @@
 > Commits you push to the connected branch sync back to Lovable and show up in
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
+
+- Store public memorial copy as one typed JSON document per page in `site_content`; this keeps every page independently editable and seedable.
+- Enforce CMS writes through authenticated administrator RLS and server functions; route guards alone are not a security boundary.
