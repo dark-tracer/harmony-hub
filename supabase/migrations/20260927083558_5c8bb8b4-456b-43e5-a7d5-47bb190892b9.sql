@@ -1,0 +1,4 @@
+CREATE POLICY "Admins can upload memorial photos" ON storage.objects FOR INSERT TO authenticated WITH CHECK (bucket_id = 'memorial-photos' AND private.has_role(auth.uid(), 'admin'::public.app_role));
+CREATE POLICY "Admins can read memorial photos" ON storage.objects FOR SELECT TO authenticated USING (bucket_id = 'memorial-photos' AND private.has_role(auth.uid(), 'admin'::public.app_role));
+CREATE POLICY "Admins can update memorial photos" ON storage.objects FOR UPDATE TO authenticated USING (bucket_id = 'memorial-photos' AND private.has_role(auth.uid(), 'admin'::public.app_role));
+CREATE POLICY "Admins can delete memorial photos" ON storage.objects FOR DELETE TO authenticated USING (bucket_id = 'memorial-photos' AND private.has_role(auth.uid(), 'admin'::public.app_role));
