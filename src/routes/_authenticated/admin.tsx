@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
-import { ChevronDown, ChevronUp, ExternalLink, LogOut, Plus, RotateCcw, Save, Trash2 } from "lucide-react";
+import { ChevronDown, ChevronUp, ExternalLink, LogOut, Plus, RotateCcw, Save, Trash2, Upload } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
