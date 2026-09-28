@@ -28,7 +28,7 @@ function Obituary() {
         </div>
       </div>
       {c.chapters.map((ch, idx) => <Fragment key={idx}>
-        <AdinkraDivider symbol={symbols[idx % 3]} className="my-16" />
+        <AdinkraDivider symbol={symbols[idx % 3]!} className="my-16" />
         <section className="reveal">
           <p className="eyebrow">Chapter {ch.number}</p>
           <h2 className="mt-3 font-display text-3xl text-primary md:text-4xl">{ch.title}</h2>
