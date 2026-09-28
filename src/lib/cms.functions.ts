@@ -3,7 +3,7 @@ import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import type { Json } from "@/integrations/supabase/types";
 
-const inputSchema = z.object({ key: z.enum(["shared", "home", "obituary", "service-details", "order-of-service", "photo-gallery"]), content: z.record(z.unknown()) });
+const inputSchema = z.object({ key: z.enum(["shared", "home", "obituary", "service-details", "order-of-service", "photo-gallery", "slideshow"]), content: z.record(z.unknown()) });
 
 export const saveCmsContent = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])

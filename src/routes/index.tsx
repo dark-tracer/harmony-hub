@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { MemorialShell } from "@/components/memorial-shell";
 import { AdinkraDivider } from "@/components/adinkra";
 import { portrait } from "@/lib/memorial-data";
-import { useCmsContent } from "@/lib/cms-content";
+import { useCmsContent, useCmsContentStatus } from "@/lib/cms-content";
 
 export const Route = createFileRoute("/")({
   head: () => ({ meta: [
@@ -46,12 +46,13 @@ function Slideshow({ slides }: { slides: { url: string; caption: string }[] }) {
 function Home() {
   const content = useCmsContent("home");
   const services = useCmsContent("service-details");
-  const gallery = useCmsContent("photo-gallery");
-  const slides = (content.slides ?? []).filter((s) => s.url && s.show?.toLowerCase() !== "no");
+  const [gallery, galleryLoaded] = useCmsContentStatus("photo-gallery");
+  const [slideshow, slidesLoaded] = useCmsContentStatus("slideshow");
+  const slides = (slideshow.slides ?? []).filter((s) => s.url && s.show?.toLowerCase() !== "no");
   const heroSlides = slides.length ? slides : [{ url: content.portraitUrl, caption: content.portraitAlt }];
   return <MemorialShell overlayHeader>
     <section className="relative flex min-h-[100svh] items-center justify-center overflow-hidden px-5 pt-18 text-center text-primary-foreground">
-      <Slideshow slides={heroSlides} />
+      {slidesLoaded && <Slideshow slides={heroSlides} />}
       <div className="relative z-10 animate-rise">
         <p className="font-label text-xs uppercase tracking-[.45em] text-gold-soft">Celebration of Life</p>
         <h1 className="mt-6 font-display text-5xl font-bold uppercase leading-none tracking-wide sm:text-7xl md:text-8xl">{content.name}</h1>
@@ -93,7 +94,7 @@ function Home() {
     <section className="mx-auto max-w-6xl px-5 py-24 text-center">
       <p className="reveal eyebrow">{content.galleryEyebrow}</p>
       <h2 className="reveal mt-4 font-display text-4xl text-primary md:text-5xl">{content.galleryTitle}</h2>
-      <div className="mt-12 grid grid-cols-2 gap-3 md:grid-cols-4">{gallery.photos.slice(0, 4).map((p, idx) => <img key={idx} src={p.url} alt={p.caption} className={`reveal w-full rounded-2xl object-cover ${idx % 2 ? "aspect-[3/4] md:mt-10" : "aspect-[3/4]"}`} />)}</div>
+      <div className="mt-12 grid grid-cols-2 gap-3 md:grid-cols-4">{galleryLoaded && gallery.photos.slice(0, 4).map((p, idx) => <img key={idx} src={p.url} alt={p.caption} className={`reveal w-full rounded-2xl object-cover ${idx % 2 ? "aspect-[3/4] md:mt-10" : "aspect-[3/4]"}`} />)}</div>
       <Link to="/photo-gallery" className="mt-12 inline-flex items-center gap-2 rounded-full bg-primary px-7 py-3.5 font-label text-sm text-primary-foreground transition hover:bg-moss">{content.galleryAction} <ArrowRight size={15} /></Link>
     </section>
 
