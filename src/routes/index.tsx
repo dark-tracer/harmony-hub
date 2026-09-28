@@ -30,8 +30,8 @@ function Slideshow({ slides }: { slides: { url: string; caption: string }[] }) {
   }, [paused, n]);
   return (
     <div className="absolute inset-0" onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)}
-      onTouchStart={(e) => (touch.current = e.touches[0].clientX)}
-      onTouchEnd={(e) => { if (touch.current === null) return; const dx = e.changedTouches[0].clientX - touch.current; if (Math.abs(dx) > 40) go(dx < 0 ? 1 : -1); touch.current = null; }}>
+      onTouchStart={(e) => (touch.current = e.touches[0]!.clientX)}
+      onTouchEnd={(e) => { if (touch.current === null) return; const dx = e.changedTouches[0]!.clientX - touch.current; if (Math.abs(dx) > 40) go(dx < 0 ? 1 : -1); touch.current = null; }}>
       {slides.map((s, idx) => <img key={idx} src={s.url} alt={s.caption} className={`absolute inset-0 size-full object-cover transition-opacity duration-[2000ms] ease-in-out ${idx === i ? "opacity-100" : "opacity-0"}`} />)}
       <div className="absolute inset-0 bg-gradient-to-b from-primary/60 via-primary/45 to-primary/85" />
       {n > 1 && <>

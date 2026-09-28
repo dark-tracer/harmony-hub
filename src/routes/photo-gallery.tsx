@@ -41,7 +41,7 @@ function PhotoGallery() {
       <div className="mt-12 text-center"><p className="font-script text-4xl text-primary">{c.closingQuote}</p><p className="mx-auto mt-5 max-w-2xl font-light leading-8 text-muted-foreground">{c.closingText}</p><p className="mt-5 font-label text-xs uppercase tracking-[.3em] text-secondary">{c.closingLine}</p></div>
     </section>
     {current && <div role="dialog" aria-modal className="fixed inset-0 z-[70] flex items-center justify-center bg-primary/95 p-4 backdrop-blur-sm animate-fade-in" onClick={() => setIndex(null)}
-      onTouchStart={(e) => (touch.current = e.touches[0].clientX)} onTouchEnd={(e) => { if (touch.current === null) return; const dx = e.changedTouches[0].clientX - touch.current; if (Math.abs(dx) > 40) step(dx < 0 ? 1 : -1); touch.current = null; }}>
+      onTouchStart={(e) => (touch.current = e.touches[0]!.clientX)} onTouchEnd={(e) => { if (touch.current === null) return; const dx = e.changedTouches[0]!.clientX - touch.current; if (Math.abs(dx) > 40) step(dx < 0 ? 1 : -1); touch.current = null; }}>
       <button aria-label="Close" className="absolute right-4 top-4 grid size-11 place-items-center rounded-full border border-primary-foreground/30 text-primary-foreground" onClick={() => setIndex(null)}><X /></button>
       <button aria-label="Previous" className="absolute left-3 hidden size-11 place-items-center rounded-full border border-primary-foreground/30 text-primary-foreground md:grid" onClick={(e) => { e.stopPropagation(); step(-1); }}><ChevronLeft /></button>
       <figure className="max-h-full max-w-5xl text-center" onClick={(e) => e.stopPropagation()}>
