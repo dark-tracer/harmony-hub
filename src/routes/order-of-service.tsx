@@ -7,7 +7,7 @@ import { useCmsContent } from "@/lib/cms-content";
 
 export const Route = createFileRoute("/order-of-service")({ head: () => ({ meta: [{ title: "Order of Service — Joyce Dedo Narh" }, { name: "description", content: "The burial and thanksgiving service programme for Mama Joyce." }, { property: "og:title", content: "Order of Service — Joyce Dedo Narh" }, { property: "og:description", content: "Liturgy, songs of praise, and words of remembrance." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" }] }), component: OrderOfService });
 
-type Item = { title?: string; type?: string; text?: string };
+type Item = { title?: string | undefined; type?: string | undefined; text?: string | undefined };
 
 function Timeline({ label, title, items }: { label: string; title: string; items: Item[] }) {
   return <section>
