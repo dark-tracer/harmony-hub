@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { Menu, UserRound, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { useEffect, useState, type ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 import { AdinkraDivider } from "@/components/adinkra";
@@ -44,7 +44,6 @@ export function MemorialShell({ children, overlayHeader = false }: { children: R
             {navItems.map((item, i) => (
               <Link key={item.to} to={item.to} activeOptions={{ exact: item.to === "/" }} className={linkCls} activeProps={{ className: "text-primary after:scale-x-100" }}>{content.navigation[i] ?? item.label}</Link>
             ))}
-            <Link to="/admin" aria-label="Open memorial editor" className="grid size-8 place-items-center rounded-full border border-border text-primary hover:bg-muted"><UserRound size={14} /></Link>
           </nav>
           <Button variant="ghost" size="icon" className="md:hidden" aria-label={open ? "Close menu" : "Open menu"} onClick={() => setOpen((v) => !v)}>{open ? <X /> : <Menu />}</Button>
         </div>
