@@ -31,6 +31,8 @@ export const defaults = {
       { kicker: "Liturgy", title: "Order of Service", text: "Follow the formal sequence of worship, selected scripture readings, choir hymns, and memorial readings.", action: "Follow Liturgy", path: "/order-of-service" },
       { kicker: "Memories", title: "Photo Gallery", text: "Curated archival albums capturing Mama Joyce’s radiant smile, family milestones, and cherished memories.", action: "Browse Photographs", path: "/photo-gallery" },
     ],
+    slides: gallery.slice(0, 5).map(([url, caption]) => ({ url, caption, show: "yes" })),
+    welcomeTitle: "Welcome", servicesEyebrow: "Gather With Us", galleryEyebrow: "Treasured Moments", galleryTitle: "A Life in Pictures", galleryAction: "View gallery",
     farewellEyebrow: "Traditional Farewell", farewellTitle: "Damirifa Due, Mama Joyce.", farewellText: "May the angels escort you peacefully to your eternal home of rest in the bosom of Abraham.", farewellAction: "Order of Service",
   },
   obituary: {
@@ -46,8 +48,8 @@ export const defaults = {
   "service-details": {
     eyebrow: "Ceremonial Order & Itinerary", title: "Service Details & Arrangements", subtitle: "Gathering in faith and thanksgiving to honor a cherished life",
     services: [
-      { label: "Solemn Rites", title: "Burial Service", order: "Order I", details: [{ label: "Date & Time", value: "Saturday, 17th October 2026\n9:00 AM Prompt" }, { label: "Venue & Grounds", value: "Social Welfare Grounds\nLa Nkwantanang, Madina, Greater Accra" }, { label: "Prescribed Attire", value: "Traditional Black & White or Formal Black Funeral Attire" }] },
-      { label: "Celebration of Life", title: "Thanksgiving Service", order: "Order II", details: [{ label: "Schedule Notice", value: "[Date & Time to be confirmed]\nDetails will be updated as soon as arrangements conclude." }, { label: "Sanctuary", value: "ICGC Christ Temple East\nTeshie Rasta Rd, Teshie, Accra, Ghana" }, { label: "Prescribed Attire", value: "Joyful All-White or Elegant Black & White Thanksgiving Attire" }] },
+      { label: "Solemn Rites", title: "Burial Service", order: "Order I", mapUrl: "https://www.google.com/maps/search/?api=1&query=Social+Welfare+La+Nkwantanang+Madina", details: [{ label: "Date & Time", value: "Saturday, 17th October 2026\n9:00 AM Prompt" }, { label: "Venue & Grounds", value: "Social Welfare Grounds\nLa Nkwantanang, Madina, Greater Accra" }, { label: "Prescribed Attire", value: "Traditional Black & White or Formal Black Funeral Attire" }] },
+      { label: "Celebration of Life", title: "Thanksgiving Service", order: "Order II", mapUrl: "https://www.google.com/maps/search/?api=1&query=ICGC+Christ+Temple+East+Teshie+Accra", details: [{ label: "Schedule Notice", value: "[Date & Time to be confirmed]\nDetails will be updated as soon as arrangements conclude." }, { label: "Sanctuary", value: "ICGC Christ Temple East\nTeshie Rasta Rd, Teshie, Accra, Ghana" }, { label: "Prescribed Attire", value: "Joyful All-White or Elegant Black & White Thanksgiving Attire" }] },
     ],
     guidanceEyebrow: "Guest Guidance", guidanceTitle: "General Information & Etiquette", guidanceIntro: "Helpful guidance to ensure the comfort, dignity, and serene reflection of all congregants.",
     guidance: [{ title: "Parking & Arrival", text: "Designated parking areas are reserved at both venues with parking marshals in attendance. Guests are gently encouraged to arrive 20–30 minutes ahead of scheduled time." }, { title: "Accessibility Care", text: "Step-free ground access, wheelchair ramps, and reserved seating are designated for senior relatives, elderly congregants, and guests requiring mobility assistance." }, { title: "Sanctuary Decorum", text: "To preserve reverence during prayers and homilies, mobile devices should be switched to silent mode. Only designated memorial media stewards may record the rites." }],
@@ -58,6 +60,8 @@ export const defaults = {
     movements: [
       ["Processional Hymn","Congregational","“Great Is Thy Faithfulness” — Hymn of opening, solemn procession of clergy and family."], ["Opening Prayer & Scripture Reading","Scripture","Psalm 23 & 1 Thessalonians 4:13–18 — Words of eternal hope and invocation of the Holy Spirit."], ["Memorial Hymn","Congregational","“Abide With Me” — Fast falls the eventide; the darkness deepens; Lord, with me abide."], ["Reading of Biography & Tributes","Remembrance","A reflective account of Mama Joyce’s life journey, sacred maternal grace, and communal devotion."], ["Musical Interlude & Choir Ministration","Choral Anthem","Sacred chorale presentation commemorating lifelong faith and praise."], ["Scripture Reading & Eulogy","Solemn Word","2 Timothy 4:7–8 — “I have fought the good fight, I have finished the race, I have kept the faith.”"], ["The Sermon & Word of Comfort","Homily","Proclamation of the Gospel message and reassurance of resurrection peace to the bereaved."], ["Prayer of Commendation & Thanksgiving","Commendation","Entrusting our mother into the gentle, everlasting arms of Almighty God."], ["Recessional Hymn","Procession","“Guide Me, O Thou Great Jehovah” — Journeying forward in celestial guidance."],
     ].map(([title,type,text])=>({title,type,text})),
+    thanksgivingLabel: "Part II • Thanksgiving", thanksgivingTitle: "Thanksgiving Service",
+    thanksgivingMovements: [["Processional","Procession","Entrance of the family and congregation in joyful praise."],["Opening Prayer","Prayer","Invocation and thanksgiving for a life well lived."],["Hymn","Congregational","Songs of praise and gratitude."],["Tributes","Remembrance","Words of love and remembrance."],["Sermon","Homily","A message of hope and comfort."],["Closing Prayer","Benediction","Blessing and dismissal."],["Recessional","Procession","Departing in peace and thanksgiving."]].map(([title,type,text])=>({title,type,text})),
     bookletLabel: "Keepsake Booklet Protocol", bookletTitle: "Physical Order of Service Distribution", bookletText: "Physical, embossed memorial keepsakes with complete hymn lyrics, scriptural readings, and tribute texts will be handed to all congregants upon arrival at the sanctuary foyer.",
   },
   "photo-gallery": {
@@ -73,10 +77,10 @@ export function useCmsContent<K extends ContentKey>(key: K): (typeof defaults)[K
     const previewKey = `cms-preview-${key}`;
     const loadPreview = () => {
       const preview = localStorage.getItem(previewKey);
-      if (preview) { try { setContent(JSON.parse(preview)); return true; } catch { localStorage.removeItem(previewKey); } }
+      if (preview) { try { setContent({ ...defaults[key], ...JSON.parse(preview) }); return true; } catch { localStorage.removeItem(previewKey); } }
       return false;
     };
-    if (!loadPreview()) supabase.from("site_content").select("content").eq("content_key", key).maybeSingle().then(({ data }) => { if (data?.content) setContent(data.content as (typeof defaults)[K]); });
+    if (!loadPreview()) supabase.from("site_content").select("content").eq("content_key", key).maybeSingle().then(({ data }) => { if (data?.content) setContent({ ...defaults[key], ...(data.content as object) } as (typeof defaults)[K]); });
     const listener = (event: StorageEvent) => { if (event.key === previewKey) loadPreview(); };
     window.addEventListener("storage", listener);
     return () => window.removeEventListener("storage", listener);

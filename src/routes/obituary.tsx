@@ -1,12 +1,44 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { CalendarDays, MapPin } from "lucide-react";
+import { Fragment } from "react";
 import { MemorialShell, PageIntro } from "@/components/memorial-shell";
+import { AdinkraDivider } from "@/components/adinkra";
 import { portrait } from "@/lib/memorial-data";
 import { useCmsContent } from "@/lib/cms-content";
 
 export const Route = createFileRoute("/obituary")({ head: () => ({ meta: [
-  { title: "Her Journey & Life Story — Mama Joyce" }, { name: "description", content: "The life story and enduring legacy of Joyce Dedo Narh." },
-  { property: "og:title", content: "Her Journey & Life Story — Mama Joyce" }, { property: "og:description", content: "A life well lived, grounded in faith, family, and grace." }, { property: "og:type", content: "article" }, { name: "twitter:card", content: "summary_large_image" }, { property: "og:image", content: portrait }, { name: "twitter:image", content: portrait },
+  { title: "Obituary — Joyce Dedo Narh" }, { name: "description", content: "The life story and enduring legacy of Joyce Dedo Narh, Mama Joyce." },
+  { property: "og:title", content: "Obituary — Joyce Dedo Narh" }, { property: "og:description", content: "A life well lived, grounded in faith, family, and grace." }, { property: "og:type", content: "article" }, { name: "twitter:card", content: "summary_large_image" }, { property: "og:image", content: portrait }, { name: "twitter:image", content: portrait },
 ]}), component: Obituary });
 
-function Obituary() { const content=useCmsContent("obituary"); return <MemorialShell><PageIntro eyebrow={content.eyebrow} title={content.title} subtitle={content.subtitle} /><article className="section-wrap max-w-5xl"><div className="grid gap-10 border-b border-border pb-12 md:grid-cols-[260px_1fr]"><img src={content.portraitUrl} alt={content.portraitAlt} className="aspect-[4/5] w-full object-cover shadow-lg"/><div><p className="eyebrow">{content.monographLabel}</p><h2 className="mt-3 font-display text-4xl text-primary">{content.name}</h2><p className="mt-2 font-display text-xl italic text-secondary">{content.nickname}</p><div className="mt-7 space-y-3 font-label text-sm text-muted-foreground"><p className="flex gap-3"><CalendarDays className="text-secondary" size={19}/><span><b>Sunrise:</b> {content.sunrise} • <b>Sunset:</b> {content.sunset}</span></p><p className="flex gap-3"><MapPin className="text-secondary" size={19}/>{content.locations}</p></div><p className="mt-7 border-l-2 border-secondary pl-5 font-display text-xl italic text-primary">{content.devotion}</p></div></div>{content.chapters.map((chapter,index)=><div key={`${chapter.number}-${index}`}><section className="mt-14"><p className="eyebrow">Chapter {chapter.number}</p><h2 className="mt-2 font-display text-3xl text-primary">{chapter.title}</h2><div className="mt-5 space-y-5 prose-memorial">{chapter.paragraphs.map((paragraph,i)=><p key={i}>{paragraph}</p>)}</div></section>{index===0&&<blockquote className="my-10 bg-primary px-8 py-10 text-center font-display text-2xl italic leading-relaxed text-primary-foreground">{content.quote}<footer className="mt-4 font-label text-xs not-italic uppercase tracking-widest text-primary-soft">{content.quoteSource}</footer></blockquote>}</div>)}</article></MemorialShell> }
+const symbols = ["sankofa", "gye-nyame", "dwennimmen"] as const;
+
+function Obituary() {
+  const c = useCmsContent("obituary");
+  return <MemorialShell>
+    <PageIntro eyebrow={c.eyebrow} title={c.title} subtitle={c.subtitle} />
+    <article className="mx-auto max-w-[680px] px-5 pb-28">
+      <div className="reveal text-center">
+        <img src={c.portraitUrl} alt={c.portraitAlt} className="mx-auto aspect-[4/5] w-64 rounded-3xl object-cover shadow-soft" />
+        <h2 className="mt-10 font-display text-4xl text-primary">{c.name}</h2>
+        <p className="mt-2 font-script text-3xl text-secondary">{c.nickname}</p>
+        <div className="mt-6 flex flex-col items-center gap-2 text-sm text-muted-foreground">
+          <p className="flex items-center gap-2"><CalendarDays size={16} className="text-gold" />{c.sunrise} — {c.sunset}</p>
+          <p className="flex items-center gap-2"><MapPin size={16} className="text-gold" />{c.locations}</p>
+        </div>
+      </div>
+      {c.chapters.map((ch, idx) => <Fragment key={idx}>
+        <AdinkraDivider symbol={symbols[idx % 3]} className="my-16" />
+        <section className="reveal">
+          <p className="eyebrow">Chapter {ch.number}</p>
+          <h2 className="mt-3 font-display text-3xl text-primary md:text-4xl">{ch.title}</h2>
+          <div className="mt-8 space-y-6 text-lg font-light leading-9 text-muted-foreground">
+            {ch.paragraphs.map((p, i) => <p key={i} className={idx === 0 && i === 0 ? "first-letter:float-left first-letter:mr-3 first-letter:mt-1 first-letter:font-display first-letter:text-7xl first-letter:leading-[.8] first-letter:text-primary" : ""}>{p}</p>)}
+          </div>
+        </section>
+        {idx === 0 && <blockquote className="reveal my-16 text-center"><p className="font-script text-4xl leading-snug text-primary md:text-5xl">{c.quote}</p><footer className="mt-5 font-label text-xs uppercase tracking-[.3em] text-secondary">{c.quoteSource}</footer></blockquote>}
+      </Fragment>)}
+      <p className="reveal mt-16 text-center font-display text-xl italic text-primary">{c.devotion}</p>
+    </article>
+  </MemorialShell>;
+}
