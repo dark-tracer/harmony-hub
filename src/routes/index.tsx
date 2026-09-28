@@ -32,7 +32,7 @@ function Slideshow({ slides }: { slides: { url: string; caption: string }[] }) {
     <div className="absolute inset-0" onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)}
       onTouchStart={(e) => (touch.current = e.touches[0]!.clientX)}
       onTouchEnd={(e) => { if (touch.current === null) return; const dx = e.changedTouches[0]!.clientX - touch.current; if (Math.abs(dx) > 40) go(dx < 0 ? 1 : -1); touch.current = null; }}>
-      {slides.map((s, idx) => <img key={idx} src={s.url} alt={s.caption} className={`absolute inset-0 size-full object-cover transition-opacity duration-[2000ms] ease-in-out ${idx === i ? "opacity-100" : "opacity-0"}`} />)}
+      {slides.map((s, idx) => <img key={idx} src={s.url} alt={s.caption} className={`absolute inset-0 size-full object-cover object-top transition-opacity duration-[2000ms] ease-in-out ${idx === i ? "opacity-100" : "opacity-0"}`} />)}
       <div className="absolute inset-0 bg-gradient-to-b from-primary/60 via-primary/45 to-primary/85" />
       {n > 1 && <>
         <button aria-label="Previous photo" onClick={() => go(-1)} className="absolute left-4 top-1/2 z-10 hidden size-11 -translate-y-1/2 place-items-center rounded-full border border-primary-foreground/30 text-primary-foreground backdrop-blur-sm transition hover:bg-primary-foreground/10 md:grid"><ChevronLeft size={20} /></button>
@@ -58,7 +58,7 @@ function Home() {
         <p className="mt-4 font-script text-5xl text-gold-soft md:text-6xl">Mama Joyce</p>
         <p className="mt-6 font-label text-sm uppercase tracking-[.4em]">{content.years}</p>
       </div>
-      <div className="absolute bottom-20 right-5 z-10 grid size-28 place-items-center rounded-full bg-primary text-center shadow-soft ring-1 ring-gold ring-offset-4 ring-offset-transparent md:right-16 md:top-1/2 md:bottom-auto md:size-36 md:-translate-y-1/2">
+      <div className="absolute bottom-20 right-5 z-10 grid size-28 place-items-center rounded-full bg-primary text-center shadow-soft ring-1 ring-gold ring-offset-4 ring-offset-transparent md:right-16 md:bottom-24 md:size-36">
         <span><Leaf className="mx-auto size-4 text-gold" /><span className="block font-display text-3xl font-semibold md:text-4xl">{content.age}</span><span className="block font-label text-[9px] uppercase tracking-[.3em] text-gold-soft">Years</span></span>
       </div>
     </section>
