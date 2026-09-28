@@ -4,7 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { MemorialShell, PageIntro } from "@/components/memorial-shell";
 import { AdinkraDivider } from "@/components/adinkra";
 import { gallery } from "@/lib/memorial-data";
-import { useCmsContent } from "@/lib/cms-content";
+import { useCmsContentStatus } from "@/lib/cms-content";
 
 export const Route = createFileRoute("/photo-gallery")({ head: () => ({ meta: [
   { title: "Gallery — Joyce Dedo Narh" }, { name: "description", content: "Treasured photographs across 59 beautiful years of Mama Joyce's life." },
@@ -12,7 +12,7 @@ export const Route = createFileRoute("/photo-gallery")({ head: () => ({ meta: [
 ]}), component: PhotoGallery });
 
 function PhotoGallery() {
-  const c = useCmsContent("photo-gallery");
+  const [c, loaded] = useCmsContentStatus("photo-gallery");
   const [filter, setFilter] = useState(c.allLabel);
   const [index, setIndex] = useState<number | null>(null);
   const touch = useRef<number | null>(null);
@@ -33,7 +33,7 @@ function PhotoGallery() {
       <p className="mx-auto max-w-2xl text-center font-light leading-8 text-muted-foreground">{c.intro}</p>
       <div className="mt-10 flex flex-wrap justify-center gap-2">{filters.map((f) => <button key={f} onClick={() => setFilter(f)} className={`rounded-full border px-4 py-2 font-label text-xs tracking-wide transition ${filter === f ? "border-primary bg-primary text-primary-foreground" : "border-border bg-card text-muted-foreground hover:border-gold"}`}>{f}</button>)}</div>
       <div className="mt-12 columns-2 gap-3 md:columns-3 lg:columns-4 md:gap-4">
-        {visible.map((p, i) => <button key={`${p.url}-${i}`} onClick={() => setIndex(i)} className="group mb-3 block w-full break-inside-avoid overflow-hidden rounded-2xl border border-transparent transition duration-500 hover:border-gold md:mb-4">
+        {loaded && visible.map((p, i) => <button key={`${p.url}-${i}`} onClick={() => setIndex(i)} className="group mb-3 block w-full break-inside-avoid overflow-hidden rounded-2xl border border-transparent transition duration-500 hover:border-gold md:mb-4">
           <img src={p.url} alt={p.caption} loading="lazy" className="w-full transition duration-700 group-hover:scale-[1.03]" />
         </button>)}
       </div>

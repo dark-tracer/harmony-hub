@@ -2,12 +2,13 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { portrait, gallery } from "@/lib/memorial-data";
 
-export type ContentKey = "shared" | "home" | "obituary" | "service-details" | "order-of-service" | "photo-gallery";
+export type ContentKey = "shared" | "home" | "obituary" | "service-details" | "order-of-service" | "photo-gallery" | "slideshow";
 export type CmsDocument = Record<string, unknown>;
 
 export const contentKeys: { key: ContentKey; label: string; path: string }[] = [
   { key: "shared", label: "Header & Footer", path: "/" },
   { key: "home", label: "Home", path: "/" },
+  { key: "slideshow", label: "Homepage Slideshow", path: "/" },
   { key: "obituary", label: "Obituary", path: "/obituary" },
   { key: "service-details", label: "Service Details", path: "/service-details" },
   { key: "order-of-service", label: "Order of Service", path: "/order-of-service" },
@@ -64,6 +65,9 @@ export const defaults = {
     thanksgivingMovements: [["Processional","Procession","Entrance of the family and congregation in joyful praise."],["Opening Prayer","Prayer","Invocation and thanksgiving for a life well lived."],["Hymn","Congregational","Songs of praise and gratitude."],["Tributes","Remembrance","Words of love and remembrance."],["Sermon","Homily","A message of hope and comfort."],["Closing Prayer","Benediction","Blessing and dismissal."],["Recessional","Procession","Departing in peace and thanksgiving."]].map(([title,type,text])=>({title,type,text})),
     bookletLabel: "Keepsake Booklet Protocol", bookletTitle: "Physical Order of Service Distribution", bookletText: "Physical, embossed memorial keepsakes with complete hymn lyrics, scriptural readings, and tribute texts will be handed to all congregants upon arrival at the sanctuary foyer.",
   },
+  slideshow: {
+    slides: gallery.slice(0, 5).map(([url, caption]) => ({ url, caption, show: "yes" })),
+  },
   "photo-gallery": {
     eyebrow: "The Visual Archive", title: "Photo Gallery & Treasured Memories", subtitle: "Moments of joy, laughter, and timeless grace across 59 beautiful years", intro: "Every portrait and candid snapshot reflects Mama Joyce’s luminous faith, warm embrace, and infectious laughter. May her peace and enduring kindness bring comfort and sacred celebration.", allLabel: "All Memories",
     photos: gallery.map(([url, caption, category]) => ({ url, caption, category })),
@@ -71,19 +75,32 @@ export const defaults = {
   },
 } satisfies Record<ContentKey, CmsDocument>;
 
-export function useCmsContent<K extends ContentKey>(key: K): (typeof defaults)[K] {
-  const [content, setContent] = useState<(typeof defaults)[K]>(defaults[key]);
+const cache = new Map<ContentKey, CmsDocument>();
+
+export function useCmsContentStatus<K extends ContentKey>(key: K): [(typeof defaults)[K], boolean] {
+  const cached = cache.get(key);
+  const [content, setContent] = useState<(typeof defaults)[K]>((cached ? { ...defaults[key], ...cached } : defaults[key]) as (typeof defaults)[K]);
+  const [loaded, setLoaded] = useState(!!cached);
   useEffect(() => {
     const previewKey = `cms-preview-${key}`;
+    const isPreview = new URLSearchParams(window.location.search).has("cmsPreview");
     const loadPreview = () => {
+      if (!isPreview) return false;
       const preview = localStorage.getItem(previewKey);
-      if (preview) { try { setContent({ ...defaults[key], ...JSON.parse(preview) }); return true; } catch { localStorage.removeItem(previewKey); } }
+      if (preview) { try { setContent({ ...defaults[key], ...JSON.parse(preview) }); setLoaded(true); return true; } catch { localStorage.removeItem(previewKey); } }
       return false;
     };
-    if (!loadPreview()) supabase.from("site_content").select("content").eq("content_key", key).maybeSingle().then(({ data }) => { if (data?.content) setContent({ ...defaults[key], ...(data.content as object) } as (typeof defaults)[K]); });
+    if (!loadPreview()) supabase.from("site_content").select("content").eq("content_key", key).maybeSingle().then(({ data }) => {
+      if (data?.content) { cache.set(key, data.content as CmsDocument); setContent({ ...defaults[key], ...(data.content as object) } as (typeof defaults)[K]); }
+      setLoaded(true);
+    });
     const listener = (event: StorageEvent) => { if (event.key === previewKey) loadPreview(); };
     window.addEventListener("storage", listener);
     return () => window.removeEventListener("storage", listener);
   }, [key]);
-  return content;
+  return [content, loaded];
+}
+
+export function useCmsContent<K extends ContentKey>(key: K): (typeof defaults)[K] {
+  return useCmsContentStatus(key)[0];
 }
