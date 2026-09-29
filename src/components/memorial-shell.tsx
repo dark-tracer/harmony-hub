@@ -33,7 +33,7 @@ export function MemorialShell({ children, overlayHeader = false }: { children: R
   useReveal();
   return (
     <div className="relative min-h-screen bg-background text-foreground">
-      <img src={floralBackground} alt="" aria-hidden="true" width={1024} height={1024} className="pointer-events-none fixed inset-0 z-0 size-full object-cover opacity-[0.12]" />
+      <img src={floralBackground} alt="" aria-hidden="true" width={1024} height={1024} className="memorial-floral-background pointer-events-none fixed inset-0 z-0 size-full object-cover opacity-[0.12]" />
       <header className="sticky top-0 z-50 border-b border-border bg-card/75 backdrop-blur-xl">
         <div className="mx-auto flex h-18 max-w-7xl items-center justify-between px-5 py-3 lg:px-10">
           <Link to="/" className="flex items-center gap-3" onClick={() => setOpen(false)}>

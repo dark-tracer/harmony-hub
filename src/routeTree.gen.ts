@@ -16,6 +16,7 @@ import { Route as ObituaryRouteImport } from './routes/obituary'
 import { Route as OrderOfServiceRouteImport } from './routes/order-of-service'
 import { Route as PhotoGalleryRouteImport } from './routes/photo-gallery'
 import { Route as ServiceDetailsRouteImport } from './routes/service-details'
+import { Route as TributesRouteImport } from './routes/tributes'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 
 const IndexRoute = IndexRouteImport.update({
@@ -52,6 +53,11 @@ const ServiceDetailsRoute = ServiceDetailsRouteImport.update({
   path: '/service-details',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TributesRoute = TributesRouteImport.update({
+  id: '/tributes',
+  path: '/tributes',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
   id: '/admin',
   path: '/admin',
@@ -65,6 +71,7 @@ export interface FileRoutesByFullPath {
   '/order-of-service': typeof OrderOfServiceRoute
   '/photo-gallery': typeof PhotoGalleryRoute
   '/service-details': typeof ServiceDetailsRoute
+  '/tributes': typeof TributesRoute
   '/admin': typeof AuthenticatedAdminRoute
 }
 export interface FileRoutesByTo {
@@ -74,6 +81,7 @@ export interface FileRoutesByTo {
   '/order-of-service': typeof OrderOfServiceRoute
   '/photo-gallery': typeof PhotoGalleryRoute
   '/service-details': typeof ServiceDetailsRoute
+  '/tributes': typeof TributesRoute
   '/admin': typeof AuthenticatedAdminRoute
 }
 export interface FileRoutesById {
@@ -85,6 +93,7 @@ export interface FileRoutesById {
   '/order-of-service': typeof OrderOfServiceRoute
   '/photo-gallery': typeof PhotoGalleryRoute
   '/service-details': typeof ServiceDetailsRoute
+  '/tributes': typeof TributesRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
 }
 export interface FileRouteTypes {
@@ -96,6 +105,7 @@ export interface FileRouteTypes {
     | '/order-of-service'
     | '/photo-gallery'
     | '/service-details'
+    | '/tributes'
     | '/admin'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -105,6 +115,7 @@ export interface FileRouteTypes {
     | '/order-of-service'
     | '/photo-gallery'
     | '/service-details'
+    | '/tributes'
     | '/admin'
   id:
     | '__root__'
@@ -115,6 +126,7 @@ export interface FileRouteTypes {
     | '/order-of-service'
     | '/photo-gallery'
     | '/service-details'
+    | '/tributes'
     | '/_authenticated/admin'
   fileRoutesById: FileRoutesById
 }
@@ -126,6 +138,7 @@ export interface RootRouteChildren {
   OrderOfServiceRoute: typeof OrderOfServiceRoute
   PhotoGalleryRoute: typeof PhotoGalleryRoute
   ServiceDetailsRoute: typeof ServiceDetailsRoute
+  TributesRoute: typeof TributesRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -179,6 +192,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ServiceDetailsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/tributes': {
+      id: '/tributes'
+      path: '/tributes'
+      fullPath: '/tributes'
+      preLoaderRoute: typeof TributesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_authenticated/admin': {
       id: '/_authenticated/admin'
       path: '/admin'
@@ -208,6 +228,7 @@ const rootRouteChildren: RootRouteChildren = {
   OrderOfServiceRoute: OrderOfServiceRoute,
   PhotoGalleryRoute: PhotoGalleryRoute,
   ServiceDetailsRoute: ServiceDetailsRoute,
+  TributesRoute: TributesRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
