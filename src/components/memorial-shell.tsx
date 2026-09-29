@@ -4,6 +4,7 @@ import { useEffect, useState, type ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 import { AdinkraDivider } from "@/components/adinkra";
 import { useCmsContent } from "@/lib/cms-content";
+import floralBackground from "@/assets/memorial-floral-background.png";
 
 export const navItems = [
   { to: "/", label: "Home" },
@@ -11,6 +12,7 @@ export const navItems = [
   { to: "/service-details", label: "Service Details" },
   { to: "/order-of-service", label: "Order of Service" },
   { to: "/photo-gallery", label: "Gallery" },
+  { to: "/tributes", label: "Tributes" },
 ] as const;
 
 function useReveal() {
@@ -30,7 +32,8 @@ export function MemorialShell({ children, overlayHeader = false }: { children: R
   const content = useCmsContent("shared");
   useReveal();
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="relative min-h-screen bg-background text-foreground">
+      <img src={floralBackground} alt="" aria-hidden="true" width={1024} height={1024} className="memorial-floral-background pointer-events-none fixed inset-0 z-0 size-full object-cover opacity-[0.12]" />
       <header className="sticky top-0 z-50 border-b border-border bg-card/75 backdrop-blur-xl">
         <div className="mx-auto flex h-18 max-w-7xl items-center justify-between px-5 py-3 lg:px-10">
           <Link to="/" className="flex items-center gap-3" onClick={() => setOpen(false)}>
@@ -49,7 +52,7 @@ export function MemorialShell({ children, overlayHeader = false }: { children: R
         </div>
         {open && <nav className="border-t border-border bg-card px-5 py-4 md:hidden">{navItems.map((item, i) => <Link key={item.to} to={item.to} activeOptions={{ exact: item.to === "/" }} className="block border-b border-border/60 py-4 font-display text-lg text-muted-foreground last:border-0" activeProps={{ className: "text-primary" }} onClick={() => setOpen(false)}>{content.navigation[i] ?? item.label}</Link>)}</nav>}
       </header>
-      <main className={overlayHeader ? "-mt-18" : ""}>{children}</main>
+      <main className={`relative z-10 ${overlayHeader ? "-mt-18" : ""}`}>{children}</main>
       <footer className="botanical border-t border-border bg-card px-5 py-16 text-center">
         <div className="relative mx-auto max-w-3xl">
           <p className="font-display text-2xl text-primary">{content.footerTitle}</p>
