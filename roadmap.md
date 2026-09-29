@@ -6,3 +6,6 @@
 - [x] Build protected sign-in and editor
 - [x] Connect all public pages to editable content
 - [x] Verify owner edits, public rendering, and access controls
+- [ ] Add floral backgrounds across public pages
+- [ ] Add an editable public Tributes page
+- [ ] Verify tribute editing and responsive public display

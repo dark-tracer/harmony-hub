@@ -159,6 +159,10 @@
   }
 }
 
+@media (max-width: 640px) {
+  .memorial-floral-background { opacity: .09; object-fit: cover; }
+}
+
 @utility memorial-intro {
   position: relative;
   overflow: hidden;

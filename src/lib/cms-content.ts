@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { portrait, gallery } from "@/lib/memorial-data";
 
-export type ContentKey = "shared" | "home" | "obituary" | "service-details" | "order-of-service" | "photo-gallery" | "slideshow";
+export type ContentKey = "shared" | "home" | "obituary" | "service-details" | "order-of-service" | "photo-gallery" | "slideshow" | "tributes";
 export type CmsDocument = Record<string, unknown>;
 
 export const contentKeys: { key: ContentKey; label: string; path: string }[] = [
@@ -13,13 +13,14 @@ export const contentKeys: { key: ContentKey; label: string; path: string }[] = [
   { key: "service-details", label: "Service Details", path: "/service-details" },
   { key: "order-of-service", label: "Order of Service", path: "/order-of-service" },
   { key: "photo-gallery", label: "Photo Gallery", path: "/photo-gallery" },
+  { key: "tributes", label: "Tributes", path: "/tributes" },
 ];
 
 export const defaults = {
   shared: {
     name: "JOYCE DEDO NARH", descriptor: "Mama Joyce (1967–2026)", footerTitle: "In Loving Memory of Joyce Dedo Narh",
     footerYears: "Mama Joyce • 1967 – 2026", footerMessage: "Celebrating a Life of Grace, Faith, and Generosity", footerClosing: "Damirifa Due",
-    navigation: ["Home", "Obituary", "Service Details", "Order of Service", "Photo Gallery"],
+    navigation: ["Home", "Obituary", "Service Details", "Order of Service", "Photo Gallery", "Tributes"],
   },
   home: {
     eyebrow: "Celebration of a Cherished Life", name: "Joyce Dedo Narh", nickname: "Affectionately known as Mama Joyce", years: "1967 — 2026",
@@ -72,6 +73,17 @@ export const defaults = {
     eyebrow: "The Visual Archive", title: "Photo Gallery & Treasured Memories", subtitle: "Moments of joy, laughter, and timeless grace across 59 beautiful years", intro: "Every portrait and candid snapshot reflects Mama Joyce’s luminous faith, warm embrace, and infectious laughter. May her peace and enduring kindness bring comfort and sacred celebration.", allLabel: "All Memories",
     photos: gallery.map(([url, caption, category]) => ({ url, caption, category })),
     closingQuote: "“Her smile remains etched in our hearts forever.”", closingText: "In every warm embrace she offered, every hymn she sang, and every soul she comforted, Mama Joyce left behind a tapestry of light that no passage of time can dim.", closingLine: "Aseda • Damirifa Due • 1967 – 2026",
+  },
+  tributes: {
+    eyebrow: "Words of Remembrance",
+    title: "Tributes to Mama Joyce",
+    subtitle: "Messages of love, gratitude, and cherished memories from family and friends",
+    introduction: "Her kindness lives on in the stories we carry. These words celebrate the countless ways Mama Joyce brought faith, warmth, and generosity into the lives around her.",
+    tributes: [
+      { author: "The Narh Family", relationship: "Family", date: "", message: "Mama Joyce was the heart of our family—a woman whose prayers, wisdom, and boundless love made every person feel at home. Her legacy will continue in every life she nurtured and every act of kindness she inspired." },
+    ],
+    closingQuote: "“What we have once enjoyed deeply we can never lose. All that we love deeply becomes a part of us.”",
+    closingLine: "Forever in our hearts",
   },
 } satisfies Record<ContentKey, CmsDocument>;
 
