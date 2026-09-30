@@ -14,6 +14,63 @@ export type Database = {
   }
   public: {
     Tables: {
+      family_tributes: {
+        Row: {
+          author_name: string
+          created_at: string
+          display_order: number
+          id: string
+          message: string
+          relationship: string
+        }
+        Insert: {
+          author_name: string
+          created_at?: string
+          display_order?: number
+          id?: string
+          message: string
+          relationship?: string
+        }
+        Update: {
+          author_name?: string
+          created_at?: string
+          display_order?: number
+          id?: string
+          message?: string
+          relationship?: string
+        }
+        Relationships: []
+      }
+      guest_tributes: {
+        Row: {
+          created_at: string
+          id: string
+          is_anonymous: boolean
+          message: string
+          name: string
+          status: Database["public"]["Enums"]["tribute_status"]
+          submitted_ip_hash: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_anonymous?: boolean
+          message: string
+          name: string
+          status?: Database["public"]["Enums"]["tribute_status"]
+          submitted_ip_hash?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_anonymous?: boolean
+          message?: string
+          name?: string
+          status?: Database["public"]["Enums"]["tribute_status"]
+          submitted_ip_hash?: string | null
+        }
+        Relationships: []
+      }
       site_content: {
         Row: {
           content: Json
@@ -61,10 +118,19 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_approved_guest_tributes: {
+        Args: never
+        Returns: {
+          created_at: string
+          display_name: string
+          id: string
+          message: string
+        }[]
+      }
     }
     Enums: {
       app_role: "admin"
+      tribute_status: "pending" | "approved" | "rejected"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -193,6 +259,7 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin"],
+      tribute_status: ["pending", "approved", "rejected"],
     },
   },
 } as const
