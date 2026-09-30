@@ -1,6 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
-import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+import { requireSupabaseAuth } from "@/lib/auth-middleware";
 import type { Json } from "@/integrations/supabase/types";
 
 const inputSchema = z.object({ key: z.enum(["shared", "home", "obituary", "service-details", "order-of-service", "photo-gallery", "slideshow", "tributes"]), content: z.record(z.unknown()) });
