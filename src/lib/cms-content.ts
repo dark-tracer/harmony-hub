@@ -76,12 +76,9 @@ export const defaults = {
   },
   tributes: {
     eyebrow: "Words of Remembrance",
-    title: "Tributes to Mama Joyce",
+    title: "Guest Book & Tributes",
     subtitle: "Messages of love, gratitude, and cherished memories from family and friends",
     introduction: "Her kindness lives on in the stories we carry. These words celebrate the countless ways Mama Joyce brought faith, warmth, and generosity into the lives around her.",
-    tributes: [
-      { author: "The Narh Family", relationship: "Family", date: "", message: "Mama Joyce was the heart of our family—a woman whose prayers, wisdom, and boundless love made every person feel at home. Her legacy will continue in every life she nurtured and every act of kindness she inspired." },
-    ],
     closingQuote: "“What we have once enjoyed deeply we can never lose. All that we love deeply becomes a part of us.”",
     closingLine: "Forever in our hearts",
   },
