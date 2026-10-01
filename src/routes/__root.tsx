@@ -38,6 +38,18 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   console.error(error);
   const router = useRouter();
   useEffect(() => {
+    if (isStaleAssetError(error)) {
+      try {
+        const t = Number(sessionStorage.getItem("stale-asset-reload") || 0);
+        if (Date.now() - t > 30000) {
+          sessionStorage.setItem("stale-asset-reload", String(Date.now()));
+          window.location.reload();
+          return;
+        }
+      } catch {
+        /* ignore */
+      }
+    }
     reportLovableError(error, { boundary: "tanstack_root_error_component" });
   }, [error]);
 
@@ -103,10 +115,21 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
   errorComponent: ErrorComponent,
 });
 
+// After a new publish, browsers holding an old page can request asset files that
+// no longer exist. Reload once (guarded per 30s) so they pick up the fresh version.
+const staleAssetRecovery = `(function(){var K="stale-asset-reload";function r(){try{var t=Number(sessionStorage.getItem(K)||0);if(Date.now()-t<30000)return;sessionStorage.setItem(K,String(Date.now()));}catch(e){}location.reload();}function m(x){var s=String((x&&(x.message||x.reason&&x.reason.message||x.reason))||x||"");return /dynamically imported module|Importing a module script failed|Failed to fetch dynamically|error loading dynamically/i.test(s);}window.addEventListener("vite:preloadError",function(e){e.preventDefault&&e.preventDefault();r();});window.addEventListener("error",function(e){if(m(e))r();});window.addEventListener("unhandledrejection",function(e){if(m(e))r();});})();`;
+
+export function isStaleAssetError(error: unknown) {
+  return /dynamically imported module|Importing a module script failed|Failed to fetch dynamically|error loading dynamically/i.test(
+    String((error as Error)?.message ?? error),
+  );
+}
+
 function RootShell({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
       <head>
+        <script dangerouslySetInnerHTML={{ __html: staleAssetRecovery }} />
         <HeadContent />
       </head>
       <body>
