@@ -32,7 +32,19 @@ function OrderOfService() {
       <div className="mt-6 flex justify-center"><Button variant="outline" size="sm" className="rounded-full" onClick={() => window.print()}><Printer />{c.printLabel}</Button></div>
       <div className="mt-16"><Timeline label={c.partLabel} title={c.liturgyTitle} items={c.movements} /></div>
       <AdinkraDivider symbol="gye-nyame" className="my-20" />
-      <Timeline label={c.thanksgivingLabel} title={c.thanksgivingTitle} items={c.thanksgivingMovements} />
+      <section className="reveal">
+        <div className="rounded-3xl border border-border bg-card p-8 text-center md:p-12">
+          <p className="eyebrow">{c.thanksgivingLabel}</p>
+          <h2 className="mt-3 font-display text-3xl text-primary md:text-4xl">{c.thanksgivingTitle}</h2>
+          <div className="mt-8 space-y-1 font-light leading-8 text-muted-foreground">
+            <p>{c.thanksgivingDate}</p>
+            <p>{c.thanksgivingTime}</p>
+          </div>
+          <AdinkraDivider symbol="dwennimmen" className="my-8" />
+          <p className="font-display text-xl text-primary md:text-2xl">{c.thanksgivingVenue}</p>
+          <p className="mt-2 font-light leading-7 text-muted-foreground">{c.thanksgivingAddress}</p>
+        </div>
+      </section>
       <div className="reveal mt-20 rounded-3xl bg-muted p-8 text-center"><p className="eyebrow">{c.bookletLabel}</p><h3 className="mt-3 font-display text-2xl text-primary">{c.bookletTitle}</h3><p className="mt-3 font-light leading-7 text-muted-foreground">{c.bookletText}</p></div>
     </div>
   </MemorialShell>;
