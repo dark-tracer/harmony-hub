@@ -34,7 +34,7 @@ export function MemorialShell({ children, overlayHeader = false }: { children: R
   return (
     <div className="relative min-h-screen bg-background text-foreground">
       <img src={floralBackground} alt="" aria-hidden="true" width={1024} height={1024} className="memorial-floral-background pointer-events-none fixed inset-0 z-0 size-full object-cover opacity-[0.12]" />
-      <header className="sticky top-0 z-50 border-b border-border bg-card/75 backdrop-blur-xl">
+      <header className="sticky top-0 z-50 border-b border-gold/15 bg-card/55 shadow-soft backdrop-blur-2xl backdrop-saturate-150">
         <div className="mx-auto flex h-18 max-w-7xl items-center justify-between px-5 py-3 lg:px-10">
           <Link to="/" className="flex items-center gap-3" onClick={() => setOpen(false)}>
             <span className="grid size-11 place-items-center rounded-full border border-gold/50 font-display text-sm font-semibold tracking-widest text-primary">JDN</span>
