@@ -34,7 +34,7 @@ export function MemorialShell({ children, overlayHeader = false }: { children: R
   return (
     <div className="relative min-h-screen bg-background text-foreground">
       <img src={floralBackground} alt="" aria-hidden="true" width={1024} height={1024} className="memorial-floral-background pointer-events-none fixed inset-0 z-0 size-full object-cover opacity-[0.12]" />
-      <header className="sticky top-0 z-50 border-b border-border bg-card/75 backdrop-blur-xl">
+      <header className="sticky top-0 z-50 border-b border-card/40 bg-card/45 shadow-soft backdrop-blur-2xl backdrop-saturate-150">
         <div className="mx-auto flex h-18 max-w-7xl items-center justify-between px-5 py-3 lg:px-10">
           <Link to="/" className="flex items-center gap-3" onClick={() => setOpen(false)}>
             <span className="grid size-11 place-items-center rounded-full border border-gold/50 font-display text-sm font-semibold tracking-widest text-primary">JDN</span>
@@ -50,7 +50,7 @@ export function MemorialShell({ children, overlayHeader = false }: { children: R
           </nav>
           <Button variant="ghost" size="icon" className="md:hidden" aria-label={open ? "Close menu" : "Open menu"} onClick={() => setOpen((v) => !v)}>{open ? <X /> : <Menu />}</Button>
         </div>
-        {open && <nav className="border-t border-border bg-card px-5 py-4 md:hidden">{navItems.map((item, i) => <Link key={item.to} to={item.to} activeOptions={{ exact: item.to === "/" }} className="block border-b border-border/60 py-4 font-display text-lg text-muted-foreground last:border-0" activeProps={{ className: "text-primary" }} onClick={() => setOpen(false)}>{content.navigation[i] ?? item.label}</Link>)}</nav>}
+        {open && <nav className="border-t border-card/40 bg-card/60 px-5 py-4 backdrop-blur-2xl md:hidden">{navItems.map((item, i) => <Link key={item.to} to={item.to} activeOptions={{ exact: item.to === "/" }} className="block border-b border-border/60 py-4 font-display text-lg text-muted-foreground last:border-0" activeProps={{ className: "text-primary" }} onClick={() => setOpen(false)}>{content.navigation[i] ?? item.label}</Link>)}</nav>}
       </header>
       <main className={`relative z-10 ${overlayHeader ? "-mt-18" : ""}`}>{children}</main>
       <footer className="botanical border-t border-border bg-card px-5 py-16 text-center">
