@@ -34,9 +34,13 @@ export const listApprovedGuestTributes = createServerFn({ method: "GET" }).handl
 });
 
 export const listFamilyTributes = createServerFn({ method: "GET" }).handler(async () => {
-  const { data, error } = await publicClient().from("family_tributes").select("id, author_name, relationship, message, display_order").order("display_order").order("created_at");
-  if (error) throw new Error("Could not load family tributes");
-  return data ?? [];
+  const c = publicClient();
+  const [cats, trs] = await Promise.all([
+    c.from("tribute_categories").select("id, name, category_order").order("category_order").order("created_at"),
+    c.from("family_tributes").select("id, author_name, relationship, message, category_id, tribute_order").order("tribute_order").order("created_at"),
+  ]);
+  if (cats.error || trs.error) throw new Error("Could not load family tributes");
+  return (cats.data ?? []).map((cat) => ({ id: cat.id, name: cat.name, tributes: (trs.data ?? []).filter((t) => t.category_id === cat.id) })).filter((g) => g.tributes.length > 0);
 });
 
 const submitSchema = z.object({
@@ -81,35 +85,61 @@ export const setGuestTributeStatus = createServerFn({ method: "POST" })
     return { ok: true };
   });
 
-export const adminListFamilyTributes = createServerFn({ method: "GET" })
+export const adminListFamilyData = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
     await assertAdmin(context);
-    const { data, error } = await context.supabase.from("family_tributes").select("id, author_name, relationship, message, display_order").order("display_order").order("created_at");
-    if (error) throw new Error(error.message);
-    return data ?? [];
+    const [cats, trs] = await Promise.all([
+      context.supabase.from("tribute_categories").select("id, name, category_order").order("category_order").order("created_at"),
+      context.supabase.from("family_tributes").select("id, author_name, relationship, message, category_id, tribute_order").order("tribute_order").order("created_at"),
+    ]);
+    if (cats.error) throw new Error(cats.error.message);
+    if (trs.error) throw new Error(trs.error.message);
+    return { categories: cats.data ?? [], tributes: trs.data ?? [] };
   });
 
-const familySchema = z.object({
-  items: z.array(z.object({ id: z.string().uuid().optional(), author_name: z.string().trim().min(1).max(150), relationship: z.string().trim().max(100), message: z.string().trim().min(1).max(10000) })).max(200),
-  deletedIds: z.array(z.string().uuid()),
-});
+const uuid = z.string().uuid();
+const adminFn = <T extends z.ZodTypeAny>(schema: T, run: (data: z.infer<T>, sb: any) => Promise<void>) =>
+  createServerFn({ method: "POST" })
+    .middleware([requireSupabaseAuth])
+    .inputValidator((input) => schema.parse(input))
+    .handler(async ({ data, context }) => { await assertAdmin(context); await run(data, context.supabase); return { ok: true }; });
+const check = (r: { error: { message: string; code?: string } | null }) => {
+  if (r.error) throw new Error(r.error.code === "23505" ? "A category with that name already exists" : r.error.message);
+};
 
-export const saveFamilyTributes = createServerFn({ method: "POST" })
+export const createTributeCategory = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input) => familySchema.parse(input))
+  .inputValidator((input) => z.object({ name: z.string().trim().min(1).max(100) }).parse(input))
   .handler(async ({ data, context }) => {
     await assertAdmin(context);
-    if (data.deletedIds.length) {
-      const { error } = await context.supabase.from("family_tributes").delete().in("id", data.deletedIds);
-      if (error) throw new Error(error.message);
-    }
-    for (const [index, item] of data.items.entries()) {
-      const row = { author_name: item.author_name, relationship: item.relationship, message: item.message, display_order: index };
-      const { error } = item.id
-        ? await context.supabase.from("family_tributes").update(row).eq("id", item.id)
-        : await context.supabase.from("family_tributes").insert(row);
-      if (error) throw new Error(error.message);
-    }
-    return { ok: true };
+    const { data: last } = await context.supabase.from("tribute_categories").select("category_order").order("category_order", { ascending: false }).limit(1).maybeSingle();
+    const r = await context.supabase.from("tribute_categories").insert({ name: data.name, category_order: (last?.category_order ?? -1) + 1 }).select("id, name, category_order").single();
+    check(r);
+    return r.data!;
   });
+
+export const renameTributeCategory = adminFn(z.object({ id: uuid, name: z.string().trim().min(1).max(100) }), async (d, sb) => check(await sb.from("tribute_categories").update({ name: d.name }).eq("id", d.id)));
+
+export const deleteTributeCategory = adminFn(z.object({ id: uuid }), async (d, sb) => {
+  const { count } = await sb.from("family_tributes").select("id", { count: "exact", head: true }).eq("category_id", d.id);
+  if (count) throw new Error(`Reassign or delete these ${count} tributes first`);
+  check(await sb.from("tribute_categories").delete().eq("id", d.id));
+});
+
+export const reorderTributeCategories = adminFn(z.object({ ids: z.array(uuid).max(200) }), async (d, sb) => {
+  for (const [i, id] of d.ids.entries()) check(await sb.from("tribute_categories").update({ category_order: i }).eq("id", id));
+});
+
+export const reorderFamilyTributes = adminFn(z.object({ ids: z.array(uuid).max(500) }), async (d, sb) => {
+  for (const [i, id] of d.ids.entries()) check(await sb.from("family_tributes").update({ tribute_order: i }).eq("id", id));
+});
+
+export const saveFamilyTribute = adminFn(z.object({ id: uuid.optional(), category_id: uuid, author_name: z.string().trim().min(1).max(150), relationship: z.string().trim().max(100), message: z.string().trim().min(1).max(10000) }), async (d, sb) => {
+  const row = { category_id: d.category_id, author_name: d.author_name, relationship: d.relationship, message: d.message };
+  if (d.id) { check(await sb.from("family_tributes").update(row).eq("id", d.id)); return; }
+  const { data: last } = await sb.from("family_tributes").select("tribute_order").eq("category_id", d.category_id).order("tribute_order", { ascending: false }).limit(1).maybeSingle();
+  check(await sb.from("family_tributes").insert({ ...row, tribute_order: (last?.tribute_order ?? -1) + 1 }));
+});
+
+export const deleteFamilyTribute = adminFn(z.object({ id: uuid }), async (d, sb) => check(await sb.from("family_tributes").delete().eq("id", d.id)));
