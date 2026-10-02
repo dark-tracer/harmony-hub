@@ -17,29 +17,43 @@ export type Database = {
       family_tributes: {
         Row: {
           author_name: string
+          category_id: string
           created_at: string
           display_order: number
           id: string
           message: string
           relationship: string
+          tribute_order: number
         }
         Insert: {
           author_name: string
+          category_id: string
           created_at?: string
           display_order?: number
           id?: string
           message: string
           relationship?: string
+          tribute_order?: number
         }
         Update: {
           author_name?: string
+          category_id?: string
           created_at?: string
           display_order?: number
           id?: string
           message?: string
           relationship?: string
+          tribute_order?: number
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "family_tributes_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "tribute_categories"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       guest_tributes: {
         Row: {
@@ -89,6 +103,27 @@ export type Database = {
           content_key?: string
           updated_at?: string
           updated_by?: string | null
+        }
+        Relationships: []
+      }
+      tribute_categories: {
+        Row: {
+          category_order: number
+          created_at: string
+          id: string
+          name: string
+        }
+        Insert: {
+          category_order?: number
+          created_at?: string
+          id?: string
+          name: string
+        }
+        Update: {
+          category_order?: number
+          created_at?: string
+          id?: string
+          name?: string
         }
         Relationships: []
       }
