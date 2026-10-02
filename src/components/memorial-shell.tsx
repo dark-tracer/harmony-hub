@@ -50,7 +50,7 @@ export function MemorialShell({ children, overlayHeader = false }: { children: R
           </nav>
           <Button variant="ghost" size="icon" className="md:hidden" aria-label={open ? "Close menu" : "Open menu"} onClick={() => setOpen((v) => !v)}>{open ? <X /> : <Menu />}</Button>
         </div>
-        {open && <nav className="border-t border-border bg-card px-5 py-4 md:hidden">{navItems.map((item, i) => <Link key={item.to} to={item.to} activeOptions={{ exact: item.to === "/" }} className="block border-b border-border/60 py-4 font-display text-lg text-muted-foreground last:border-0" activeProps={{ className: "text-primary" }} onClick={() => setOpen(false)}>{content.navigation[i] ?? item.label}</Link>)}</nav>}
+        {open && <nav className="border-t border-gold/15 bg-card/80 backdrop-blur-2xl px-5 py-4 md:hidden">{navItems.map((item, i) => <Link key={item.to} to={item.to} activeOptions={{ exact: item.to === "/" }} className="block border-b border-border/60 py-4 font-display text-lg text-muted-foreground last:border-0" activeProps={{ className: "text-primary" }} onClick={() => setOpen(false)}>{content.navigation[i] ?? item.label}</Link>)}</nav>}
       </header>
       <main className={`relative z-10 ${overlayHeader ? "-mt-18" : ""}`}>{children}</main>
       <footer className="botanical border-t border-border bg-card px-5 py-16 text-center">
