@@ -99,14 +99,69 @@ export const adminListFamilyData = createServerFn({ method: "GET" })
   });
 
 const uuid = z.string().uuid();
-const adminFn = <T extends z.ZodTypeAny>(schema: T, run: (data: z.infer<T>, sb: any) => Promise<void>) =>
-  createServerFn({ method: "POST" })
-    .middleware([requireSupabaseAuth])
-    .inputValidator((input) => schema.parse(input))
-    .handler(async ({ data, context }) => { await assertAdmin(context); await run(data, context.supabase); return { ok: true }; });
 const check = (r: { error: { message: string; code?: string } | null }) => {
   if (r.error) throw new Error(r.error.code === "23505" ? "A category with that name already exists" : r.error.message);
 };
+
+export const renameTributeCategory = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input) => z.object({ id: uuid, name: z.string().trim().min(1).max(100) }).parse(input))
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context);
+    check(await context.supabase.from("tribute_categories").update({ name: data.name }).eq("id", data.id));
+    return { ok: true };
+  });
+
+export const deleteTributeCategory = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input) => z.object({ id: uuid }).parse(input))
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context);
+    const { count } = await context.supabase.from("family_tributes").select("id", { count: "exact", head: true }).eq("category_id", data.id);
+    if (count) throw new Error(`Reassign or delete these ${count} tributes first`);
+    check(await context.supabase.from("tribute_categories").delete().eq("id", data.id));
+    return { ok: true };
+  });
+
+export const reorderTributeCategories = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input) => z.object({ ids: z.array(uuid).max(200) }).parse(input))
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context);
+    for (const [i, id] of data.ids.entries()) check(await context.supabase.from("tribute_categories").update({ category_order: i }).eq("id", id));
+    return { ok: true };
+  });
+
+export const reorderFamilyTributes = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input) => z.object({ ids: z.array(uuid).max(500) }).parse(input))
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context);
+    for (const [i, id] of data.ids.entries()) check(await context.supabase.from("family_tributes").update({ tribute_order: i }).eq("id", id));
+    return { ok: true };
+  });
+
+export const saveFamilyTribute = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input) => z.object({ id: uuid.optional(), category_id: uuid, author_name: z.string().trim().min(1).max(150), relationship: z.string().trim().max(100), message: z.string().trim().min(1).max(10000) }).parse(input))
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context);
+    const sb = context.supabase;
+    const row = { category_id: data.category_id, author_name: data.author_name, relationship: data.relationship, message: data.message };
+    if (data.id) { check(await sb.from("family_tributes").update(row).eq("id", data.id)); return { ok: true }; }
+    const { data: last } = await sb.from("family_tributes").select("tribute_order").eq("category_id", data.category_id).order("tribute_order", { ascending: false }).limit(1).maybeSingle();
+    check(await sb.from("family_tributes").insert({ ...row, tribute_order: (last?.tribute_order ?? -1) + 1 }));
+    return { ok: true };
+  });
+
+export const deleteFamilyTribute = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input) => z.object({ id: uuid }).parse(input))
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context);
+    check(await context.supabase.from("family_tributes").delete().eq("id", data.id));
+    return { ok: true };
+  });
 
 export const createTributeCategory = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
