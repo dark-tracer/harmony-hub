@@ -115,7 +115,7 @@ export function FamilyTributesAdmin() {
   </div>;
 }
 
-function TributeEditor({ initial, cats, onCreate, onSave, onDelete, onCancel, reorder }: { initial: Tribute; cats: Category[]; onCreate: (n: string) => Promise<Category | null>; onSave: (t: Tribute) => Promise<void>; onDelete?: () => void; onCancel?: () => void; reorder?: { up: boolean; down: boolean; move: (d: number) => void } }) {
+function TributeEditor({ initial, cats, onCreate, onSave, onDelete, onCancel, reorder }: { initial: Tribute; cats: Category[]; onCreate: (n: string) => Promise<Category | null>; onSave: (t: Tribute) => Promise<void>; onDelete?: (() => void) | undefined; onCancel?: (() => void) | undefined; reorder?: { up: boolean; down: boolean; move: (d: number) => void } | undefined }) {
   const [t, setT] = useState(initial);
   const [busy, setBusy] = useState(false);
   useEffect(() => setT(initial), [initial]);
@@ -123,7 +123,7 @@ function TributeEditor({ initial, cats, onCreate, onSave, onDelete, onCancel, re
   async function save() {
     if (!t.category_id) { toast.error("Choose or create a category"); return; }
     if (!t.author_name.trim() || !t.message.trim()) { toast.error("Each tribute needs a name and a message"); return; }
-    setBusy(true); try { await onSave({ id: t.id, category_id: t.category_id, author_name: t.author_name, relationship: t.relationship, message: t.message }); } finally { setBusy(false); }
+    setBusy(true); try { await onSave({ ...(t.id ? { id: t.id } : {}), category_id: t.category_id, author_name: t.author_name, relationship: t.relationship, message: t.message }); } finally { setBusy(false); }
   }
   return <div className="space-y-3 border border-border bg-background p-4">
     <div className="flex items-center justify-between"><span className="font-label text-xs font-bold text-muted-foreground">{t.id ? (catName ?? "Uncategorised") : "New tribute"}</span><div className="flex gap-1">
