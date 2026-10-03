@@ -61,6 +61,22 @@ function CategoryCombobox({ categories, value, onChange, onCreate }: { categorie
   </div>;
 }
 
+function AddCategoryRow({ onCreate }: { onCreate: (name: string) => Promise<Category | null> }) {
+  const [name, setName] = useState("");
+  const [busy, setBusy] = useState(false);
+  async function add() {
+    const n = name.trim();
+    if (!n) return;
+    setBusy(true);
+    try { const c = await onCreate(n); if (c) setName(""); }
+    finally { setBusy(false); }
+  }
+  return <div className="flex flex-wrap items-center gap-2 border border-dashed border-border bg-background p-3">
+    <Input className="min-w-40 flex-1" placeholder="New category name" value={name} onChange={(e) => setName(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") void add(); }} />
+    <Button size="sm" variant="outline" disabled={!name.trim() || busy} onClick={() => void add()}><Plus />{busy ? "Adding…" : "Add category"}</Button>
+  </div>;
+}
+
 export function FamilyTributesAdmin() {
   const list = useServerFn(adminListFamilyData);
   const createCat = useServerFn(createTributeCategory);
