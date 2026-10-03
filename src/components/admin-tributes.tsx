@@ -61,6 +61,22 @@ function CategoryCombobox({ categories, value, onChange, onCreate }: { categorie
   </div>;
 }
 
+function AddCategoryRow({ onCreate }: { onCreate: (name: string) => Promise<Category | null> }) {
+  const [name, setName] = useState("");
+  const [busy, setBusy] = useState(false);
+  async function add() {
+    const n = name.trim();
+    if (!n) return;
+    setBusy(true);
+    try { const c = await onCreate(n); if (c) setName(""); }
+    finally { setBusy(false); }
+  }
+  return <div className="flex flex-wrap items-center gap-2 border border-dashed border-border bg-background p-3">
+    <Input className="min-w-40 flex-1" placeholder="New category name" value={name} onChange={(e) => setName(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") void add(); }} />
+    <Button size="sm" variant="outline" disabled={!name.trim() || busy} onClick={() => void add()}><Plus />{busy ? "Adding…" : "Add category"}</Button>
+  </div>;
+}
+
 export function FamilyTributesAdmin() {
   const list = useServerFn(adminListFamilyData);
   const createCat = useServerFn(createTributeCategory);
@@ -91,7 +107,8 @@ export function FamilyTributesAdmin() {
 
     {view === "categories" ? <div className="space-y-3">
       <p className="text-sm text-muted-foreground">Order here sets the order on the Obituary page. Empty categories are hidden from visitors.</p>
-      {cats.length === 0 && <p className="text-sm text-muted-foreground">No categories yet. Create one while adding a tribute.</p>}
+      <AddCategoryRow onCreate={create} />
+      {cats.length === 0 && <p className="text-sm text-muted-foreground">No categories yet.</p>}
       {cats.map((c, i) => <div key={c.id} className="flex flex-wrap items-center gap-2 border border-border bg-background p-3">
         <div className="flex flex-col"><Button size="icon" variant="ghost" aria-label="Move up" disabled={i === 0} onClick={() => act(() => reorderCats({ data: { ids: swap(cats, i, -1).map((x) => x.id) } }), "Order saved", "Could not reorder")}><ChevronUp /></Button><Button size="icon" variant="ghost" aria-label="Move down" disabled={i === cats.length - 1} onClick={() => act(() => reorderCats({ data: { ids: swap(cats, i, 1).map((x) => x.id) } }), "Order saved", "Could not reorder")}><ChevronDown /></Button></div>
         <Input className="min-w-40 flex-1" value={names[c.id] ?? ""} onChange={(e) => setNames((n) => ({ ...n, [c.id]: e.target.value }))} />
