@@ -5,7 +5,6 @@ import { MemorialShell, PageIntro } from "@/components/memorial-shell";
 import { AdinkraDivider } from "@/components/adinkra";
 import { portrait } from "@/lib/memorial-data";
 import { useCmsContent } from "@/lib/cms-content";
-import { FamilyTributes } from "@/components/family-tributes";
 
 export const Route = createFileRoute("/obituary")({ head: () => ({ meta: [
   { title: "Obituary — Joyce Dedo Narh" }, { name: "description", content: "The life story and enduring legacy of Joyce Dedo Narh, Mama Joyce." },
@@ -40,7 +39,6 @@ function Obituary() {
         {idx === 0 && <blockquote className="reveal my-16 text-center"><p className="font-script text-4xl leading-snug text-primary md:text-5xl">{c.quote}</p><footer className="mt-5 font-label text-xs uppercase tracking-[.3em] text-secondary">{c.quoteSource}</footer></blockquote>}
       </Fragment>)}
       <p className="reveal mt-16 text-center font-display text-xl italic text-primary">{c.devotion}</p>
-      <FamilyTributes />
     </article>
   </MemorialShell>;
 }

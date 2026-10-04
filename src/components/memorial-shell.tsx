@@ -12,7 +12,8 @@ export const navItems = [
   { to: "/service-details", label: "Service Details" },
   { to: "/order-of-service", label: "Order of Service" },
   { to: "/photo-gallery", label: "Gallery" },
-  { to: "/tributes", label: "Tributes" },
+  { to: "/family-tributes", label: "Family Tributes" },
+  { to: "/tributes", label: "Guest Book" },
 ] as const;
 
 function useReveal() {
