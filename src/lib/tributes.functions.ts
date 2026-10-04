@@ -103,6 +103,17 @@ const check = (r: { error: { message: string; code?: string } | null }) => {
   if (r.error) throw new Error(r.error.code === "23505" ? "A category with that name already exists" : r.error.message);
 };
 
+export const createTributeCategory = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input) => z.object({ name: z.string().trim().min(1).max(100) }).parse(input))
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context);
+    const { data: last } = await context.supabase.from("tribute_categories").select("category_order").order("category_order", { ascending: false }).limit(1).maybeSingle();
+    const r = await context.supabase.from("tribute_categories").insert({ name: data.name, category_order: (last?.category_order ?? -1) + 1 }).select("id, name, category_order").single();
+    check(r);
+    return r.data!;
+  });
+
 export const renameTributeCategory = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input) => z.object({ id: uuid, name: z.string().trim().min(1).max(100) }).parse(input))
