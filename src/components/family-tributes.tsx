@@ -7,16 +7,18 @@ import { listFamilyTributes } from "@/lib/tributes.functions";
 type Group = { id: string; name: string; tributes: { id: string; author_name: string; relationship: string; message: string }[] };
 const symbols = ["gye-nyame", "sankofa", "dwennimmen"] as const;
 
-export function FamilyTributes() {
+export function FamilyTributes({ heading = true }: { heading?: boolean }) {
   const list = useServerFn(listFamilyTributes);
   const [groups, setGroups] = useState<Group[]>([]);
   useEffect(() => { list().then(setGroups).catch(() => setGroups([])); }, [list]);
   if (!groups.length) return null;
   return (
     <section className="mt-4">
-      <AdinkraDivider symbol="gye-nyame" className="my-16" />
-      <p className="eyebrow text-center">From Those Who Loved Her</p>
-      <h2 className="mt-3 text-center font-display text-3xl text-primary md:text-4xl">Family Tributes</h2>
+      {heading && <>
+        <AdinkraDivider symbol="gye-nyame" className="my-16" />
+        <p className="eyebrow text-center">From Those Who Loved Her</p>
+        <h2 className="mt-3 text-center font-display text-3xl text-primary md:text-4xl">Family Tributes</h2>
+      </>}
       {groups.map((g, gi) => (
         <div key={g.id}>
           {gi > 0 && <AdinkraDivider symbol={symbols[gi % 3]!} className="my-14" />}

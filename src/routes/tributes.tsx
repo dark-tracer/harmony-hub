@@ -13,9 +13,9 @@ import { listApprovedGuestTributes, submitGuestTribute } from "@/lib/tributes.fu
 
 export const Route = createFileRoute("/tributes")({
   head: () => ({ meta: [
-    { title: "Guest Book & Tributes — Joyce Dedo Narh" },
-    { name: "description", content: "Leave a message of love and read tributes honoring Joyce Dedo Narh, affectionately known as Mama Joyce." },
-    { property: "og:title", content: "Guest Book & Tributes — Joyce Dedo Narh" },
+    { title: "Guest Book — Joyce Dedo Narh" },
+    { name: "description", content: "Leave a message of love in the guest book honoring Joyce Dedo Narh, affectionately known as Mama Joyce." },
+    { property: "og:title", content: "Guest Book — Joyce Dedo Narh" },
     { property: "og:description", content: "Share a memory of Mama Joyce and read words of remembrance from friends and loved ones." },
     { property: "og:type", content: "website" },
     { name: "twitter:card", content: "summary_large_image" },
