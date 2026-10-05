@@ -22,6 +22,10 @@ export const defaults = {
     name: "JOYCE DEDO NARH", descriptor: "Mama Joyce (1967–2026)", footerTitle: "In Loving Memory of Joyce Dedo Narh",
     footerYears: "Mama Joyce • 1967 – 2026", footerMessage: "Celebrating a Life of Grace, Faith, and Generosity", footerClosing: "Damirifa Due",
     navigation: ["Home", "Obituary", "Service Details", "Order of Service", "Photo Gallery", "Family Tributes", "Guest Book"],
+    designerCredit: "Website designed by Bernie Amponsah",
+    portfolioLabel: "Portfolio (UI/UX)", portfolioUrl: "https://bernie.lovable.app/",
+    photographyLabel: "Photography", photographyUrl: "https://tracer-portraits-studio.lovable.app/",
+    whatsappLabel: "WhatsApp", whatsappUrl: "https://wa.me/233502605560",
   },
   home: {
     eyebrow: "Celebration of a Cherished Life", name: "Joyce Dedo Narh", nickname: "Affectionately known as Mama Joyce", years: "1967 — 2026",
