@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { Menu, X } from "lucide-react";
+import { BriefcaseBusiness, Camera, MessageCircle, Menu, X } from "lucide-react";
 import { useEffect, useState, type ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 import { AdinkraDivider } from "@/components/adinkra";
@@ -62,6 +62,20 @@ export function MemorialShell({ children, overlayHeader = false }: { children: R
           <p className="font-script text-3xl text-primary">{content.footerMessage}</p>
           <p className="mt-3 font-label text-xs uppercase tracking-[.3em] text-muted-foreground">{content.footerClosing}</p>
           <nav className="mt-10 flex flex-wrap justify-center gap-x-6 gap-y-2 font-label text-xs text-muted-foreground">{navItems.map((item, i) => <Link key={item.to} to={item.to} className="hover:text-primary">{content.navigation[i] ?? item.label}</Link>)}</nav>
+          <div className="mt-10 border-t border-gold/20 pt-7">
+            <p className="font-label text-[11px] text-muted-foreground/80">{content.designerCredit}</p>
+            <div className="mt-3 flex flex-wrap justify-center gap-2">
+              <Button asChild variant="outline" size="sm" className="h-7 border-gold/40 bg-background/35 px-2.5 text-[11px] font-normal text-muted-foreground shadow-none hover:border-gold/70 hover:bg-accent hover:text-primary">
+                <a href={content.portfolioUrl} target="_blank" rel="noreferrer"><BriefcaseBusiness aria-hidden="true" />{content.portfolioLabel}</a>
+              </Button>
+              <Button asChild variant="outline" size="sm" className="h-7 border-gold/40 bg-background/35 px-2.5 text-[11px] font-normal text-muted-foreground shadow-none hover:border-gold/70 hover:bg-accent hover:text-primary">
+                <a href={content.photographyUrl} target="_blank" rel="noreferrer"><Camera aria-hidden="true" />{content.photographyLabel}</a>
+              </Button>
+              <Button asChild variant="outline" size="sm" className="h-7 border-gold/40 bg-background/35 px-2.5 text-[11px] font-normal text-muted-foreground shadow-none hover:border-gold/70 hover:bg-accent hover:text-primary">
+                <a href={content.whatsappUrl} target="_blank" rel="noreferrer"><MessageCircle aria-hidden="true" />{content.whatsappLabel}</a>
+              </Button>
+            </div>
+          </div>
         </div>
       </footer>
     </div>
