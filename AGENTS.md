@@ -11,4 +11,5 @@
 
 - Store public memorial copy as one typed JSON document per page in `site_content`; this keeps every page independently editable and seedable.
 - Enforce CMS writes through authenticated administrator RLS and server functions; route guards alone are not a security boundary.
-- Keep tribute entries in the existing page-document CMS model so the owner can manage them with the same secure editor workflow.
+- Keep curated family tribute entries and optional portraits in the existing `family_tributes` model with administrator-only server writes; this preserves category management and the secure editor workflow.
+- Public CMS media defaults must be empty; only saved or explicitly previewed media may render, preventing placeholder photo flashes.

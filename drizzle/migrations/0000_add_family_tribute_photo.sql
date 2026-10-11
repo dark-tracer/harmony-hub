@@ -1,0 +1,2 @@
+ALTER TABLE public.family_tributes ADD COLUMN photo_url text NOT NULL DEFAULT '';
+COMMENT ON COLUMN public.family_tributes.photo_url IS 'Optional uploaded portrait displayed beside the author tribute; existing administrator write and public read policies apply.';

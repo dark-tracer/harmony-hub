@@ -22,6 +22,7 @@ export type Database = {
           display_order: number
           id: string
           message: string
+          photo_url: string
           relationship: string
           tribute_order: number
         }
@@ -32,6 +33,7 @@ export type Database = {
           display_order?: number
           id?: string
           message: string
+          photo_url?: string
           relationship?: string
           tribute_order?: number
         }
@@ -42,6 +44,7 @@ export type Database = {
           display_order?: number
           id?: string
           message?: string
+          photo_url?: string
           relationship?: string
           tribute_order?: number
         }

@@ -3,12 +3,11 @@ import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { MemorialShell, PageIntro } from "@/components/memorial-shell";
 import { AdinkraDivider } from "@/components/adinkra";
-import { gallery } from "@/lib/memorial-data";
 import { useCmsContentStatus } from "@/lib/cms-content";
 
 export const Route = createFileRoute("/photo-gallery")({ head: () => ({ meta: [
   { title: "Gallery — Joyce Dedo Narh" }, { name: "description", content: "Treasured photographs across 59 beautiful years of Mama Joyce's life." },
-  { property: "og:title", content: "Gallery — Joyce Dedo Narh" }, { property: "og:description", content: "The visual archive of Mama Joyce's radiant life." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" }, { property: "og:image", content: gallery[0][0] }, { name: "twitter:image", content: gallery[0][0] },
+  { property: "og:title", content: "Gallery — Joyce Dedo Narh" }, { property: "og:description", content: "The visual archive of Mama Joyce's radiant life." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" },
 ]}), component: PhotoGallery });
 
 function PhotoGallery() {

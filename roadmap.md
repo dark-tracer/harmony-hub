@@ -1,5 +1,9 @@
 # CMS roadmap
 
+- [x] Stop placeholder photos appearing before saved photos
+- [x] Add optional uploaded portraits to individual family tributes
+- [x] Verify photo loading and authenticated tribute photo save/readback
+
 - [x] Connect Lovable Cloud and enable owner authentication
 - [x] Create secure content and administrator data model
 - [x] Seed the current memorial content

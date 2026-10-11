@@ -3,12 +3,11 @@ import { CalendarDays, MapPin } from "lucide-react";
 import { Fragment } from "react";
 import { MemorialShell, PageIntro } from "@/components/memorial-shell";
 import { AdinkraDivider } from "@/components/adinkra";
-import { portrait } from "@/lib/memorial-data";
 import { useCmsContent } from "@/lib/cms-content";
 
 export const Route = createFileRoute("/obituary")({ head: () => ({ meta: [
   { title: "Obituary — Joyce Dedo Narh" }, { name: "description", content: "The life story and enduring legacy of Joyce Dedo Narh, Mama Joyce." },
-  { property: "og:title", content: "Obituary — Joyce Dedo Narh" }, { property: "og:description", content: "A life well lived, grounded in faith, family, and grace." }, { property: "og:type", content: "article" }, { name: "twitter:card", content: "summary_large_image" }, { property: "og:image", content: portrait }, { name: "twitter:image", content: portrait },
+  { property: "og:title", content: "Obituary — Joyce Dedo Narh" }, { property: "og:description", content: "A life well lived, grounded in faith, family, and grace." }, { property: "og:type", content: "article" }, { name: "twitter:card", content: "summary_large_image" },
 ]}), component: Obituary });
 
 const symbols = ["sankofa", "gye-nyame", "dwennimmen"] as const;
@@ -19,7 +18,7 @@ function Obituary() {
     <PageIntro eyebrow={c.eyebrow} title={c.title} subtitle={c.subtitle} />
     <article className="mx-auto max-w-[680px] px-5 pb-28">
       <div className="reveal text-center">
-        <img src={c.portraitUrl} alt={c.portraitAlt} className="mx-auto aspect-[4/5] w-64 rounded-3xl object-cover shadow-soft" />
+        {c.portraitUrl ? <img src={c.portraitUrl} alt={c.portraitAlt} className="mx-auto aspect-[4/5] w-64 rounded-3xl object-cover shadow-soft" /> : <div aria-hidden="true" className="mx-auto aspect-[4/5] w-64 rounded-3xl bg-muted" />}
         <h2 className="mt-10 font-display text-4xl text-primary">{c.name}</h2>
         <p className="mt-2 font-script text-3xl text-secondary">{c.nickname}</p>
         <div className="mt-6 flex flex-col items-center gap-2 text-sm text-muted-foreground">

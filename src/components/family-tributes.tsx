@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { AdinkraDivider } from "@/components/adinkra";
 import { listFamilyTributes } from "@/lib/tributes.functions";
 
-type Group = { id: string; name: string; tributes: { id: string; author_name: string; relationship: string; message: string }[] };
+type Group = { id: string; name: string; tributes: { id: string; author_name: string; relationship: string; message: string; photo_url: string }[] };
 const symbols = ["gye-nyame", "sankofa", "dwennimmen"] as const;
 
 export function FamilyTributes({ heading = true }: { heading?: boolean }) {
@@ -21,14 +21,15 @@ export function FamilyTributes({ heading = true }: { heading?: boolean }) {
       </>}
       {groups.map((g, gi) => (
         <div key={g.id}>
-          {gi > 0 && <AdinkraDivider symbol={symbols[gi % 3]!} className="my-14" />}
+          {gi > 0 && <AdinkraDivider symbol={symbols[gi % 3] ?? "sankofa"} className="my-14" />}
           <h3 className="mt-10 text-center font-display text-2xl text-primary">{g.name}</h3>
           <div className="mt-8 space-y-6">
             {g.tributes.map((r) => (
               <article key={r.id} className="rounded-3xl border border-border bg-card/90 p-7 shadow-soft md:p-9">
+                {r.photo_url && <img src={r.photo_url} alt={r.author_name} loading="lazy" className="float-left mb-4 mr-5 h-32 w-24 rounded-lg border border-border object-cover sm:h-40 sm:w-32" />}
                 <Quote className="size-6 text-gold" strokeWidth={1.25} aria-hidden="true" />
                 <p className="mt-4 whitespace-pre-line text-lg font-light leading-9 text-muted-foreground">{r.message}</p>
-                <div className="mt-6 border-t border-border pt-4">
+                <div className="clear-both mt-6 border-t border-border pt-4">
                   <p className="font-display text-lg font-semibold text-primary">{r.author_name}</p>
                   {r.relationship && <p className="font-label text-xs uppercase tracking-[.18em] text-secondary">{r.relationship}</p>}
                 </div>
