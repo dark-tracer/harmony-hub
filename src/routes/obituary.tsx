@@ -19,7 +19,7 @@ function Obituary() {
     <PageIntro eyebrow={c.eyebrow} title={c.title} subtitle={c.subtitle} />
     <article className="mx-auto max-w-[680px] px-5 pb-28">
       <div className="reveal text-center">
-        <img src={c.portraitUrl} alt={c.portraitAlt} className="mx-auto aspect-[4/5] w-64 rounded-3xl object-cover shadow-soft" />
+        {c.portraitUrl ? <img src={c.portraitUrl} alt={c.portraitAlt} className="mx-auto aspect-[4/5] w-64 rounded-3xl object-cover shadow-soft" /> : <div aria-hidden="true" className="mx-auto aspect-[4/5] w-64 rounded-3xl bg-muted" />}
         <h2 className="mt-10 font-display text-4xl text-primary">{c.name}</h2>
         <p className="mt-2 font-script text-3xl text-secondary">{c.nickname}</p>
         <div className="mt-6 flex flex-col items-center gap-2 text-sm text-muted-foreground">

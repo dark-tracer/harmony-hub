@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { portrait, gallery } from "@/lib/memorial-data";
 
 export type ContentKey = "shared" | "home" | "obituary" | "service-details" | "order-of-service" | "photo-gallery" | "slideshow" | "tributes" | "family-tributes";
 export type CmsDocument = Record<string, unknown>;
@@ -29,7 +28,7 @@ export const defaults = {
   },
   home: {
     eyebrow: "Celebration of a Cherished Life", name: "Joyce Dedo Narh", nickname: "Affectionately known as Mama Joyce", years: "1967 — 2026",
-    introduction: "A beacon of warmth, timeless dignity, and unwavering faith whose love continues to shelter and guide generations.", portraitUrl: portrait, portraitAlt: "Joyce Dedo Narh, Mama Joyce", age: "59", ageLabel: "Years of Grace",
+    introduction: "A beacon of warmth, timeless dignity, and unwavering faith whose love continues to shelter and guide generations.", portraitUrl: "", portraitAlt: "Joyce Dedo Narh, Mama Joyce", age: "59", ageLabel: "Years of Grace",
     verse: "“The Lord gave, and the Lord hath taken away; blessed be the name of the Lord.”", verseReference: "Job 1:21",
     sectionEyebrow: "Memorial Keep-Sake", sectionTitle: "Commemoration & Service", sectionText: "Explore the chapters of Mama Joyce’s earthly pilgrimage, liturgical proceedings, and shared moments of joy.",
     cards: [
@@ -38,12 +37,12 @@ export const defaults = {
       { kicker: "Liturgy", title: "Order of Service", text: "Follow the formal sequence of worship, selected scripture readings, choir hymns, and memorial readings.", action: "Follow Liturgy", path: "/order-of-service" },
       { kicker: "Memories", title: "Photo Gallery", text: "Curated archival albums capturing Mama Joyce’s radiant smile, family milestones, and cherished memories.", action: "Browse Photographs", path: "/photo-gallery" },
     ],
-    slides: gallery.slice(0, 5).map(([url, caption]) => ({ url, caption, show: "yes" })),
+    slides: [] as { url: string; caption: string; show: string }[],
     welcomeTitle: "Welcome", servicesEyebrow: "Gather With Us", galleryEyebrow: "Treasured Moments", galleryTitle: "A Life in Pictures", galleryAction: "View gallery",
     farewellEyebrow: "Traditional Farewell", farewellTitle: "Damirifa Due, Mama Joyce.", farewellText: "May the angels escort you peacefully to your eternal home of rest in the bosom of Abraham.", farewellAction: "Order of Service",
   },
   obituary: {
-    eyebrow: "In Loving Memorial • 1967 – 2026", title: "Her Journey & Life Story", subtitle: "A Life Well Lived, Grounded in Faith, Family & Grace", portraitUrl: portrait, portraitAlt: "Portrait of Mama Joyce",
+    eyebrow: "In Loving Memorial • 1967 – 2026", title: "Her Journey & Life Story", subtitle: "A Life Well Lived, Grounded in Faith, Family & Grace", portraitUrl: "", portraitAlt: "Portrait of Mama Joyce",
     monographLabel: "Biographical Monograph", name: "Joyce Dedo Narh", nickname: "Affectionately known to all as “Mama Joyce”", sunrise: "September 14, 1967", sunset: "February 18, 2026", locations: "Eastern Region, Ghana • Accra • Somanya", devotion: "Fifty-Nine Years of Boundless Devotion and Sacred Service",
     chapters: [
       { number: "I", title: "Early Life & Foundations", paragraphs: ["Born in 1967 amid the verdant hills and fertile soils of the Eastern Region of Ghana, Joyce Dedo Narh was welcomed into the world as a beacon of promise. From her earliest childhood, she bore the hallmarks of her heritage: an unshakable dignity, an appetite for industrious effort, and a profound instinct toward kindness.", "Growing up in a tight-knit community anchored by tradition, young Joyce absorbed the ancestral virtues of reverence, respect for elders, and communal solidarity. Her home was an academy of practical grace, and she approached every task with silent diligence and radiant good humor."] },
@@ -73,11 +72,11 @@ export const defaults = {
     bookletLabel: "Keepsake Booklet Protocol", bookletTitle: "Physical Order of Service Distribution", bookletText: "Physical, embossed memorial keepsakes with complete hymn lyrics, scriptural readings, and tribute texts will be handed to all congregants upon arrival at the sanctuary foyer.",
   },
   slideshow: {
-    slides: gallery.slice(0, 5).map(([url, caption]) => ({ url, caption, show: "yes" })),
+    slides: [] as { url: string; caption: string; show: string }[],
   },
   "photo-gallery": {
     eyebrow: "The Visual Archive", title: "Photo Gallery & Treasured Memories", subtitle: "Moments of joy, laughter, and timeless grace across 59 beautiful years", intro: "Every portrait and candid snapshot reflects Mama Joyce’s luminous faith, warm embrace, and infectious laughter. May her peace and enduring kindness bring comfort and sacred celebration.", allLabel: "All Memories",
-    photos: gallery.map(([url, caption, category]) => ({ url, caption, category })),
+    photos: [] as { url: string; caption: string; category: string }[],
     closingQuote: "“Her smile remains etched in our hearts forever.”", closingText: "In every warm embrace she offered, every hymn she sang, and every soul she comforted, Mama Joyce left behind a tapestry of light that no passage of time can dim.", closingLine: "Aseda • Damirifa Due • 1967 – 2026",
   },
   "family-tributes": {

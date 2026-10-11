@@ -44,15 +44,15 @@ function Slideshow({ slides }: { slides: { url: string; caption: string }[] }) {
 }
 
 function Home() {
-  const content = useCmsContent("home");
+  const [content, homeLoaded] = useCmsContentStatus("home");
   const services = useCmsContent("service-details");
   const [gallery, galleryLoaded] = useCmsContentStatus("photo-gallery");
   const [slideshow, slidesLoaded] = useCmsContentStatus("slideshow");
   const slides = (slideshow.slides ?? []).filter((s) => s.url && s.show?.toLowerCase() !== "no");
-  const heroSlides = slides.length ? slides : [{ url: content.portraitUrl, caption: content.portraitAlt }];
+  const heroSlides = slides.length ? slides : content.portraitUrl ? [{ url: content.portraitUrl, caption: content.portraitAlt }] : [];
   return <MemorialShell overlayHeader>
-    <section className="relative flex min-h-[100svh] items-center justify-center overflow-hidden px-5 pt-18 text-center text-primary-foreground">
-      {slidesLoaded && <Slideshow slides={heroSlides} />}
+    <section className="relative flex min-h-[100svh] items-center justify-center overflow-hidden bg-primary px-5 pt-18 text-center text-primary-foreground">
+      {slidesLoaded && (slides.length > 0 || homeLoaded) && <Slideshow slides={heroSlides} />}
       <div className="relative z-10 animate-rise">
         <p className="font-label text-xs uppercase tracking-[.45em] text-gold-soft">Celebration of Life</p>
         <h1 className="mt-6 font-display text-5xl font-bold uppercase leading-none tracking-wide sm:text-7xl md:text-8xl">{content.name}</h1>
