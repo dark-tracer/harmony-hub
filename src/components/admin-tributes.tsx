@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { TributePhotoField } from "@/components/tribute-photo-field";
 import { adminListFamilyData, adminListGuestTributes, createTributeCategory, deleteFamilyTribute, deleteTributeCategory, renameTributeCategory, reorderFamilyTributes, reorderTributeCategories, saveFamilyTribute, setGuestTributeStatus } from "@/lib/tributes.functions";
 
 type Guest = { id: string; name: string; is_anonymous: boolean; message: string; status: "pending" | "approved" | "rejected"; created_at: string };
@@ -38,7 +39,7 @@ export function GuestTributesAdmin() {
 }
 
 type Category = { id: string; name: string; category_order: number };
-type Tribute = { id?: string; author_name: string; relationship: string; message: string; category_id: string; tribute_order?: number };
+type Tribute = { id?: string; author_name: string; relationship: string; message: string; photo_url: string; category_id: string; tribute_order?: number };
 const errMsg = (e: unknown, f: string) => (e instanceof Error && e.message ? e.message : f);
 function swap<T>(a: T[], i: number, d: number) { const b = [...a]; const t = i + d; if (t < 0 || t >= b.length) return a; [b[i], b[t]] = [b[t]!, b[i]!]; return b; }
 
@@ -119,7 +120,7 @@ export function FamilyTributesAdmin() {
     </div> : <div className="space-y-4">
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div className="space-y-1"><Label>Show</Label><select className="h-9 border border-input bg-background px-2 text-sm" value={filter} onChange={(e) => setFilter(e.target.value)}><option value="all">All categories</option>{cats.map((c) => <option key={c.id} value={c.id}>{c.name} ({count(c.id)})</option>)}</select></div>
-        <Button size="sm" variant="outline" onClick={() => setDraft({ author_name: "", relationship: "", message: "", category_id: filter === "all" ? "" : filter })}><Plus />Add family tribute</Button>
+        <Button size="sm" variant="outline" onClick={() => setDraft({ author_name: "", relationship: "", message: "", photo_url: "", category_id: filter === "all" ? "" : filter })}><Plus />Add family tribute</Button>
       </div>
       {filter === "all" && trs.length > 1 && <p className="text-xs text-muted-foreground">Choose a single category above to reorder its tributes.</p>}
       {draft && <TributeEditor key="new" initial={draft} cats={cats} onCreate={create} onCancel={() => setDraft(null)} onSave={async (t) => { await act(() => saveTr({ data: t }), "Tribute added", "Could not save"); setDraft(null); }} />}
@@ -135,12 +136,13 @@ export function FamilyTributesAdmin() {
 function TributeEditor({ initial, cats, onCreate, onSave, onDelete, onCancel, reorder }: { initial: Tribute; cats: Category[]; onCreate: (n: string) => Promise<Category | null>; onSave: (t: Tribute) => Promise<void>; onDelete?: (() => void) | undefined; onCancel?: (() => void) | undefined; reorder?: { up: boolean; down: boolean; move: (d: number) => void } | undefined }) {
   const [t, setT] = useState(initial);
   const [busy, setBusy] = useState(false);
+  const [uploading, setUploading] = useState(false);
   useEffect(() => setT(initial), [initial]);
   const catName = cats.find((c) => c.id === t.category_id)?.name;
   async function save() {
     if (!t.category_id) { toast.error("Choose or create a category"); return; }
     if (!t.author_name.trim() || !t.message.trim()) { toast.error("Each tribute needs a name and a message"); return; }
-    setBusy(true); try { await onSave({ ...(t.id ? { id: t.id } : {}), category_id: t.category_id, author_name: t.author_name, relationship: t.relationship, message: t.message }); } finally { setBusy(false); }
+    setBusy(true); try { await onSave({ ...(t.id ? { id: t.id } : {}), category_id: t.category_id, author_name: t.author_name, relationship: t.relationship, message: t.message, photo_url: t.photo_url }); } finally { setBusy(false); }
   }
   return <div className="space-y-3 border border-border bg-background p-4">
     <div className="flex items-center justify-between"><span className="font-label text-xs font-bold text-muted-foreground">{t.id ? (catName ?? "Uncategorised") : "New tribute"}</span><div className="flex gap-1">
@@ -150,7 +152,8 @@ function TributeEditor({ initial, cats, onCreate, onSave, onDelete, onCancel, re
     <div className="space-y-2"><Label>Category</Label><CategoryCombobox categories={cats} value={t.category_id} onChange={(id) => setT({ ...t, category_id: id })} onCreate={onCreate} /></div>
     <div className="space-y-2"><Label>Author name</Label><Input value={t.author_name} onChange={(e) => setT({ ...t, author_name: e.target.value })} /></div>
     <div className="space-y-2"><Label>Relationship</Label><Input value={t.relationship} placeholder="e.g. Daughter" onChange={(e) => setT({ ...t, relationship: e.target.value })} /></div>
+    <TributePhotoField value={t.photo_url ?? ""} onChange={(photo_url) => setT((current) => ({ ...current, photo_url }))} onBusyChange={setUploading} />
     <div className="space-y-2"><Label>Message</Label><Textarea rows={6} value={t.message} onChange={(e) => setT({ ...t, message: e.target.value })} /></div>
-    <div className="flex justify-end gap-2">{onCancel && <Button variant="ghost" size="sm" onClick={onCancel}>Cancel</Button>}<Button size="sm" onClick={save} disabled={busy}><Save />{busy ? "Saving…" : "Save"}</Button></div>
+    <div className="flex justify-end gap-2">{onCancel && <Button variant="ghost" size="sm" onClick={onCancel}>Cancel</Button>}<Button size="sm" onClick={save} disabled={busy || uploading}><Save />{busy ? "Saving…" : "Save"}</Button></div>
   </div>;
 }
