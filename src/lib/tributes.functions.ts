@@ -37,7 +37,7 @@ export const listFamilyTributes = createServerFn({ method: "GET" }).handler(asyn
   const c = publicClient();
   const [cats, trs] = await Promise.all([
     c.from("tribute_categories").select("id, name, category_order").order("category_order").order("created_at"),
-    c.from("family_tributes").select("id, author_name, relationship, message, category_id, tribute_order").order("tribute_order").order("created_at"),
+    c.from("family_tributes").select("id, author_name, relationship, message, photo_url, category_id, tribute_order").order("tribute_order").order("created_at"),
   ]);
   if (cats.error || trs.error) throw new Error("Could not load family tributes");
   return (cats.data ?? []).map((cat) => ({ id: cat.id, name: cat.name, tributes: (trs.data ?? []).filter((t) => t.category_id === cat.id) })).filter((g) => g.tributes.length > 0);
@@ -91,7 +91,7 @@ export const adminListFamilyData = createServerFn({ method: "GET" })
     await assertAdmin(context);
     const [cats, trs] = await Promise.all([
       context.supabase.from("tribute_categories").select("id, name, category_order").order("category_order").order("created_at"),
-      context.supabase.from("family_tributes").select("id, author_name, relationship, message, category_id, tribute_order").order("tribute_order").order("created_at"),
+      context.supabase.from("family_tributes").select("id, author_name, relationship, message, photo_url, category_id, tribute_order").order("tribute_order").order("created_at"),
     ]);
     if (cats.error) throw new Error(cats.error.message);
     if (trs.error) throw new Error(trs.error.message);
@@ -154,11 +154,11 @@ export const reorderFamilyTributes = createServerFn({ method: "POST" })
 
 export const saveFamilyTribute = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input) => z.object({ id: uuid.optional(), category_id: uuid, author_name: z.string().trim().min(1).max(150), relationship: z.string().trim().max(100), message: z.string().trim().min(1).max(10000) }).parse(input))
+  .inputValidator((input) => z.object({ id: uuid.optional(), category_id: uuid, author_name: z.string().trim().min(1).max(150), relationship: z.string().trim().max(100), message: z.string().trim().min(1).max(10000), photo_url: z.union([z.literal(""), z.string().url().max(10000).refine((url) => url.startsWith("https://"), "Photo must use a secure URL")]).default("") }).parse(input))
   .handler(async ({ data, context }) => {
     await assertAdmin(context);
     const sb = context.supabase;
-    const row = { category_id: data.category_id, author_name: data.author_name, relationship: data.relationship, message: data.message };
+    const row = { category_id: data.category_id, author_name: data.author_name, relationship: data.relationship, message: data.message, photo_url: data.photo_url };
     if (data.id) { check(await sb.from("family_tributes").update(row).eq("id", data.id)); return { ok: true }; }
     const { data: last } = await sb.from("family_tributes").select("tribute_order").eq("category_id", data.category_id).order("tribute_order", { ascending: false }).limit(1).maybeSingle();
     check(await sb.from("family_tributes").insert({ ...row, tribute_order: (last?.tribute_order ?? -1) + 1 }));
