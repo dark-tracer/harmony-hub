@@ -3,12 +3,11 @@ import { CalendarDays, MapPin } from "lucide-react";
 import { Fragment } from "react";
 import { MemorialShell, PageIntro } from "@/components/memorial-shell";
 import { AdinkraDivider } from "@/components/adinkra";
-import { portrait } from "@/lib/memorial-data";
 import { useCmsContent } from "@/lib/cms-content";
 
 export const Route = createFileRoute("/obituary")({ head: () => ({ meta: [
   { title: "Obituary — Joyce Dedo Narh" }, { name: "description", content: "The life story and enduring legacy of Joyce Dedo Narh, Mama Joyce." },
-  { property: "og:title", content: "Obituary — Joyce Dedo Narh" }, { property: "og:description", content: "A life well lived, grounded in faith, family, and grace." }, { property: "og:type", content: "article" }, { name: "twitter:card", content: "summary_large_image" }, { property: "og:image", content: portrait }, { name: "twitter:image", content: portrait },
+  { property: "og:title", content: "Obituary — Joyce Dedo Narh" }, { property: "og:description", content: "A life well lived, grounded in faith, family, and grace." }, { property: "og:type", content: "article" }, { name: "twitter:card", content: "summary_large_image" },
 ]}), component: Obituary });
 
 const symbols = ["sankofa", "gye-nyame", "dwennimmen"] as const;

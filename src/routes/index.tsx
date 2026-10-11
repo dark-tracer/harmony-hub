@@ -3,7 +3,6 @@ import { ArrowRight, CalendarDays, ChevronLeft, ChevronRight, Leaf, MapPin } fro
 import { useEffect, useRef, useState } from "react";
 import { MemorialShell } from "@/components/memorial-shell";
 import { AdinkraDivider } from "@/components/adinkra";
-import { portrait } from "@/lib/memorial-data";
 import { useCmsContent, useCmsContentStatus } from "@/lib/cms-content";
 
 export const Route = createFileRoute("/")({
@@ -13,7 +12,6 @@ export const Route = createFileRoute("/")({
     { property: "og:title", content: "Joyce Dedo Narh — Celebration of Life" },
     { property: "og:description", content: "A celebration of a cherished life of grace, faith, and generosity." },
     { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" },
-    { property: "og:image", content: portrait }, { name: "twitter:image", content: portrait },
   ]}), component: Home,
 });
 

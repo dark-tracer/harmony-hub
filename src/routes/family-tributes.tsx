@@ -2,7 +2,6 @@ import { createFileRoute } from "@tanstack/react-router";
 import { FamilyTributes } from "@/components/family-tributes";
 import { MemorialShell, PageIntro } from "@/components/memorial-shell";
 import { useCmsContent } from "@/lib/cms-content";
-import { portrait } from "@/lib/memorial-data";
 
 export const Route = createFileRoute("/family-tributes")({
   head: () => ({ meta: [
@@ -12,8 +11,6 @@ export const Route = createFileRoute("/family-tributes")({
     { property: "og:description", content: "Words of love and remembrance from those who knew Mama Joyce best." },
     { property: "og:type", content: "website" },
     { name: "twitter:card", content: "summary_large_image" },
-    { property: "og:image", content: portrait },
-    { name: "twitter:image", content: portrait },
   ] }),
   component: FamilyTributesPage,
 });
