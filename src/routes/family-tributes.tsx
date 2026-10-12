@@ -20,7 +20,7 @@ function FamilyTributesPage() {
   return (
     <MemorialShell>
       <PageIntro eyebrow={c.eyebrow} title={c.title} subtitle={c.subtitle} />
-      <article className="mx-auto max-w-[680px] px-5 pb-28">
+      <article className="mx-auto max-w-[820px] px-5 pb-28">
         <FamilyTributes heading={false} />
       </article>
     </MemorialShell>
