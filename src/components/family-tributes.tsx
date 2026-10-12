@@ -26,7 +26,7 @@ export function FamilyTributes({ heading = true }: { heading?: boolean }) {
           <div className="mt-8 space-y-6">
             {g.tributes.map((r) => (
               <article key={r.id} className="rounded-3xl border border-border bg-card/90 p-7 shadow-soft md:p-9">
-                {r.photo_url && <img src={r.photo_url} alt={r.author_name} loading="lazy" className="float-left mb-4 mr-5 h-32 w-24 rounded-lg border border-border object-cover sm:h-40 sm:w-32" />}
+                {r.photo_url && <img src={r.photo_url} alt={r.author_name} loading="lazy" className="float-left mb-5 mr-6 h-48 w-36 rounded-xl border border-border object-cover shadow-soft sm:h-64 sm:w-48 md:h-80 md:w-60" />}
                 <Quote className="size-6 text-gold" strokeWidth={1.25} aria-hidden="true" />
                 <p className="mt-4 whitespace-pre-line text-lg font-light leading-9 text-muted-foreground">{r.message}</p>
                 <div className="clear-both mt-6 border-t border-border pt-4">
