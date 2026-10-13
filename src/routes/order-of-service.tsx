@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Printer } from "lucide-react";
+import { Download } from "lucide-react";
 import { MemorialShell, PageIntro } from "@/components/memorial-shell";
 import { AdinkraDivider } from "@/components/adinkra";
 import { Button } from "@/components/ui/button";
@@ -29,7 +29,7 @@ function OrderOfService() {
     <PageIntro eyebrow={c.eyebrow} title={c.title} subtitle={c.subtitle} />
     <div className="mx-auto max-w-2xl px-5 pb-28">
       <div className="reveal rounded-3xl border border-border bg-card p-8 text-center"><p className="eyebrow">{c.themeLabel}</p><p className="mt-4 font-script text-3xl leading-snug text-primary">{c.theme}</p></div>
-      <div className="mt-6 flex justify-center"><Button variant="outline" size="sm" className="rounded-full" onClick={() => window.print()}><Printer />{c.printLabel}</Button></div>
+      {c.brochureFile && <div className="mt-6 flex justify-center"><Button asChild variant="outline" size="sm" className="rounded-full"><a href={c.brochureFile} target="_blank" rel="noreferrer" download><Download />{c.printLabel === "Print" ? "Download brochure" : c.printLabel}</a></Button></div>}
       <div className="mt-16"><Timeline label={c.partLabel} title={c.liturgyTitle} items={c.movements} /></div>
       <AdinkraDivider symbol="gye-nyame" className="my-20" />
       <section className="reveal">
