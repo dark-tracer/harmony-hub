@@ -8,7 +8,7 @@ export const contentKeys: { key: ContentKey; label: string; path: string }[] = [
   { key: "shared", label: "Header & Footer", path: "/" },
   { key: "home", label: "Home", path: "/" },
   { key: "slideshow", label: "Homepage Slideshow", path: "/" },
-  { key: "obituary", label: "Obituary", path: "/obituary" },
+  { key: "obituary", label: "Biography", path: "/obituary" },
   { key: "service-details", label: "Service Details", path: "/service-details" },
   { key: "order-of-service", label: "Order of Service", path: "/order-of-service" },
   { key: "photo-gallery", label: "Photo Gallery", path: "/photo-gallery" },
@@ -20,7 +20,7 @@ export const defaults = {
   shared: {
     name: "JOYCE DEDO NARH", descriptor: "Mama Joyce (1967–2026)", footerTitle: "In Loving Memory of Joyce Dedo Narh",
     footerYears: "Mama Joyce • 1967 – 2026", footerMessage: "Celebrating a Life of Grace, Faith, and Generosity", footerClosing: "Damirifa Due",
-    navigation: ["Home", "Obituary", "Service Details", "Order of Service", "Photo Gallery", "Family Tributes", "Guest Book"],
+    navigation: ["Home", "Biography", "Service Details", "Order of Service", "Photo Gallery", "Family Tributes", "Guest Book"],
     designerCredit: "Website designed by Bernie Amponsah",
     portfolioLabel: "Portfolio (UI/UX)", portfolioUrl: "https://bernie.lovable.app/",
     photographyLabel: "Photography", photographyUrl: "https://tracer-portraits-studio.lovable.app/",
@@ -32,7 +32,7 @@ export const defaults = {
     verse: "“The Lord gave, and the Lord hath taken away; blessed be the name of the Lord.”", verseReference: "Job 1:21",
     sectionEyebrow: "Memorial Keep-Sake", sectionTitle: "Commemoration & Service", sectionText: "Explore the chapters of Mama Joyce’s earthly pilgrimage, liturgical proceedings, and shared moments of joy.",
     cards: [
-      { kicker: "Biography", title: "Obituary & Life Story", text: "Read her inspiring journey of faith, maternal devotion, entrepreneurship, and generous communal service.", action: "Read Biography", path: "/obituary" },
+      { kicker: "Biography", title: "Biography & Life Story", text: "Read her inspiring journey of faith, maternal devotion, entrepreneurship, and generous communal service.", action: "Read Biography", path: "/obituary" },
       { kicker: "Ceremonies", title: "Service Details", text: "Locations, timings, protocol, and reception details for the Burial Service and Thanksgiving.", action: "View Venues & Times", path: "/service-details" },
       { kicker: "Liturgy", title: "Order of Service", text: "Follow the formal sequence of worship, selected scripture readings, choir hymns, and memorial readings.", action: "Follow Liturgy", path: "/order-of-service" },
       { kicker: "Memories", title: "Photo Gallery", text: "Curated archival albums capturing Mama Joyce’s radiant smile, family milestones, and cherished memories.", action: "Browse Photographs", path: "/photo-gallery" },
